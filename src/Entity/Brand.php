@@ -7,19 +7,25 @@ namespace Rika\SyliusBrandPlugin\Entity;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
-use Sylius\Component\Resource\Model\ResourceInterface;
-use Sylius\Component\Resource\Model\SlugAwareInterface;
-use Sylius\Resource\Model\TranslatableTrait;
+use Sylius\Component\Product\Model\ProductInterface;
+use Sylius\Resource\Model\ResourceInterface;
+use Sylius\Resource\Model\SlugAwareInterface;
 use Sylius\Resource\Model\TimestampableTrait;
+use Sylius\Resource\Model\ToggleableTrait;
+use Sylius\Resource\Model\TranslatableTrait;
+use Sylius\Resource\Model\TranslationInterface;
 
 #[ORM\Entity]
 #[ORM\Table(name: 'rika_brand')]
+#[ORM\HasLifecycleCallbacks]
 class Brand implements BrandInterface, ResourceInterface, SlugAwareInterface
 {
+    use TimestampableTrait;
+    use ToggleableTrait;
     use TranslatableTrait {
         __construct as private initializeTranslationsCollection;
+        getTranslation as private doGetTranslation;
     }
-    use TimestampableTrait;
 
     #[ORM\Id]
     #[ORM\GeneratedValue]
@@ -32,13 +38,22 @@ class Brand implements BrandInterface, ResourceInterface, SlugAwareInterface
     #[ORM\Column(type: 'string', length: 255, nullable: true)]
     protected ?string $logoPath = null;
 
-    #[ORM\Column(type: 'boolean')]
-    protected bool $enabled = true;
-
     #[ORM\Column(type: 'integer', nullable: true)]
     protected ?int $position = null;
 
-    #[ORM\OneToMany(mappedBy: 'brand', targetEntity: 'Sylius\Component\Core\Model\Product')]
+    #[ORM\OneToMany(
+        mappedBy: 'translatable',
+        targetEntity: BrandTranslation::class,
+        cascade: ['ALL'],
+        orphanRemoval: true
+    )]
+    protected Collection $translations;
+
+    #[ORM\OneToMany(
+        mappedBy: 'brand',
+        targetEntity: 'Sylius\Component\Core\Model\Product'
+    )]
+    #[ORM\OrderBy(['position' => 'ASC'])]
     protected Collection $products;
 
     public function __construct()
@@ -73,16 +88,6 @@ class Brand implements BrandInterface, ResourceInterface, SlugAwareInterface
         $this->logoPath = $logoPath;
     }
 
-    public function getEnabled(): bool
-    {
-        return $this->enabled;
-    }
-
-    public function setEnabled(bool $enabled): void
-    {
-        $this->enabled = $enabled;
-    }
-
     public function getPosition(): ?int
     {
         return $this->position;
@@ -93,28 +98,42 @@ class Brand implements BrandInterface, ResourceInterface, SlugAwareInterface
         $this->position = $position;
     }
 
+    // ✅ Surcharge pour corriger la signature
+    public function setEnabled(?bool $enabled): void
+    {
+        $this->enabled = $enabled ?? false;
+    }
+
+    /**
+     * @return Collection<int, ProductInterface>
+     */
     public function getProducts(): Collection
     {
         return $this->products;
     }
 
-    public function addProduct($product): void
+    public function hasProduct(ProductInterface $product): bool
     {
-        if (!$this->products->contains($product)) {
+        return $this->products->contains($product);
+    }
+
+    public function addProduct(ProductInterface $product): void
+    {
+        if (!$this->hasProduct($product)) {
             $this->products->add($product);
             $product->setBrand($this);
         }
     }
 
-    public function removeProduct($product): void
+    public function removeProduct(ProductInterface $product): void
     {
-        if ($this->products->contains($product)) {
+        if ($this->hasProduct($product)) {
             $this->products->removeElement($product);
             $product->setBrand(null);
         }
     }
 
-    // Méthodes pour les traductions
+    // Méthodes de traduction déléguées à BrandTranslation
     public function getName(): ?string
     {
         return $this->getTranslation()->getName();
@@ -145,13 +164,47 @@ class Brand implements BrandInterface, ResourceInterface, SlugAwareInterface
         $this->getTranslation()->setDescription($description);
     }
 
-    protected function createTranslation(): BrandTranslationInterface
+    public function getMetaKeywords(): ?string
+    {
+        return $this->getTranslation()->getMetaKeywords();
+    }
+
+    public function setMetaKeywords(?string $metaKeywords): void
+    {
+        $this->getTranslation()->setMetaKeywords($metaKeywords);
+    }
+
+    public function getMetaDescription(): ?string
+    {
+        return $this->getTranslation()->getMetaDescription();
+    }
+
+    public function setMetaDescription(?string $metaDescription): void
+    {
+        $this->getTranslation()->setMetaDescription($metaDescription);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getTranslation(?string $locale = null): TranslationInterface
+    {
+        /** @var BrandTranslationInterface $translation */
+        $translation = $this->doGetTranslation($locale);
+
+        return $translation;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    protected function createTranslation(): TranslationInterface
     {
         return new BrandTranslation();
     }
 
     public function __toString(): string
     {
-        return $this->getName() ?? '';
+        return (string) $this->getName();
     }
 }
