@@ -6,6 +6,8 @@ namespace Rika\SyliusBrandPlugin\Entity;
 
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
+use Doctrine\ORM\Mapping as ORM;
+use Gedmo\Mapping\Annotation as Gedmo;
 use Sylius\Component\Resource\Model\ResourceInterface;
 use Sylius\Component\Resource\Model\TranslatableInterface;
 use Sylius\Component\Resource\Model\TranslatableTrait;
@@ -14,6 +16,9 @@ use Sylius\Component\Resource\Model\TimestampableTrait;
 use Sylius\Component\Resource\Model\SlugAwareInterface;
 use Sylius\Component\Core\Model\ProductInterface;
 
+#[ORM\Entity]
+#[ORM\Table(name: 'rika_brand')]
+#[Gedmo\SoftDeleteable(fieldName: 'deletedAt', timeAware: false)]
 class Brand implements BrandInterface, ResourceInterface, TranslatableInterface, TimestampableInterface, SlugAwareInterface
 {
     use TranslatableTrait {
@@ -21,12 +26,29 @@ class Brand implements BrandInterface, ResourceInterface, TranslatableInterface,
     }
     use TimestampableTrait;
 
+    #[ORM\Id]
+    #[ORM\GeneratedValue(strategy: 'IDENTITY')]
+    #[ORM\Column(type: 'integer')]
     private ?int $id = null;
+
+    #[ORM\Column(type: 'string', length: 255, unique: true)]
     private ?string $code = null;
+
+    #[ORM\Column(type: 'string', length: 500, nullable: true)]
     private ?string $logoPath = null;
+
+    #[ORM\Column(type: 'boolean', options: ['default' => true])]
     private bool $enabled = true;
+
+    #[ORM\Column(type: 'integer', nullable: true)]
+    #[Gedmo\SortablePosition]
     private ?int $position = 0;
+
+    #[ORM\OneToMany(targetEntity: ProductInterface::class, mappedBy: 'brand', cascade: ['persist'])]
     private Collection $products;
+
+    #[ORM\Column(type: 'datetime', nullable: true)]
+    private ?\DateTimeInterface $deletedAt = null;
 
     public function __construct()
     {
@@ -151,6 +173,16 @@ class Brand implements BrandInterface, ResourceInterface, TranslatableInterface,
                 $product->setBrand(null);
             }
         }
+    }
+
+    public function getDeletedAt(): ?\DateTimeInterface
+    {
+        return $this->deletedAt;
+    }
+
+    public function setDeletedAt(?\DateTimeInterface $deletedAt): void
+    {
+        $this->deletedAt = $deletedAt;
     }
 
     protected function createTranslation(): BrandTranslationInterface
