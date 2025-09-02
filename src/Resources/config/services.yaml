@@ -12,6 +12,17 @@ services:
         resource: '../../Controller'
         tags: ['controller.service_arguments']
 
+    # Services manquants générés manuellement
+    rika_sylius_brand.factory.brand:
+        class: Sylius\Component\Resource\Factory\Factory
+        arguments:
+            - 'Rika\SyliusBrandPlugin\Entity\Brand'
+
+    rika_sylius_brand.factory.brand_translation:
+        class: Sylius\Component\Resource\Factory\Factory
+        arguments:
+            - 'Rika\SyliusBrandPlugin\Entity\BrandTranslation'
+
     Rika\SyliusBrandPlugin\EventListener\BrandEventListener:
         arguments:
             $uploadDir: '%rika_sylius_brand.upload_dir%'
