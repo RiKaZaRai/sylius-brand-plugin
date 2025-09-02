@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 namespace Rika\SyliusBrandPlugin\Menu;
 
 use Knp\Menu\ItemInterface;
@@ -12,9 +10,16 @@ final class AdminMenuListener
     public function addBrandMenu(MenuBuilderEvent $event): void
     {
         $menu = $event->getMenu();
-        $menu
-            ->addChild('brands', ['route' => 'sylius_admin_rika_sylius_brand_index'])
-            ->setLabel('rika_sylius_brand.ui.brands')
-            ->setLabelAttribute('icon', 'tags');
+
+        $catalogMenu = $menu->getChild('catalog');
+        
+        if (null !== $catalogMenu) {
+            $catalogMenu
+                ->addChild('brands', [
+                    'route' => 'rika_sylius_brand_admin_brand_index', // Le bon nom de route !
+                ])
+                ->setLabel('rika_sylius_brand_plugin.ui.brands')
+                ->setLabelAttribute('icon', 'trademark');
+        }
     }
 }
