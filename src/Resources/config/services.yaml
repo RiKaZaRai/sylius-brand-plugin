@@ -54,6 +54,6 @@ services:
     Rika\SyliusBrandPlugin\Form\Type\BrandChoiceType:
         tags: ['form.type']
 
-    Rika\SyliusBrandPlugin\Form\Extension\:
-        resource: '../../Form/Extension'
+    # Extensions de formulaires
+    Rika\SyliusBrandPlugin\Form\Extension\ProductTypeExtension:
         tags: ['form.type_extension']
