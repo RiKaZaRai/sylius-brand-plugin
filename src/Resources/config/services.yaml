@@ -3,14 +3,13 @@ services:
     _defaults:
         autowire: true
         autoconfigure: true
-        public: false
 
     # ------------------------------------------------------
     # Plugin services
     # ------------------------------------------------------
     Rika\SyliusBrandPlugin\:
         resource: '../../*'
-        exclude: '../../{DependencyInjection,Entity,Resources,Tests}'
+        exclude: '../../{DependencyInjection,Entity,Tests}'
 
     # ------------------------------------------------------
     # Controllers
@@ -22,25 +21,21 @@ services:
     # ------------------------------------------------------
     # EventListeners
     # ------------------------------------------------------
-    rika_sylius_brand.event_listener.brand:
-        class: Rika\SyliusBrandPlugin\EventListener\BrandEventListener
+    Rika\SyliusBrandPlugin\EventListener\BrandEventListener:
         arguments:
-            - '@request_stack'
-            - '%kernel.project_dir%/public/uploads/brands'
+            $uploadDir: '%kernel.project_dir%/public/uploads/brands'
         tags:
             - { name: kernel.event_listener, event: 'sylius.brand.pre_create', method: uploadLogo }
             - { name: kernel.event_listener, event: 'sylius.brand.pre_update', method: uploadLogo }
 
-    rika_sylius_brand.event_listener.product_mapping:
-        class: Rika\SyliusBrandPlugin\EventListener\ProductMappingListener
+    Rika\SyliusBrandPlugin\EventListener\ProductMappingListener:
         tags:
             - { name: doctrine.event_listener, event: loadClassMetadata }
 
     # ------------------------------------------------------
     # Menu
     # ------------------------------------------------------
-    rika_sylius_brand.menu.admin:
-        class: Rika\SyliusBrandPlugin\Menu\AdminMenuListener
+    Rika\SyliusBrandPlugin\Menu\AdminMenuListener:
         tags:
             - { name: kernel.event_listener, event: sylius.menu.admin.main, method: addBrandMenu }
 

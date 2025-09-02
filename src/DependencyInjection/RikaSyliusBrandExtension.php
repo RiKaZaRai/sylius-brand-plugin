@@ -1,5 +1,4 @@
 <?php
-// src/DependencyInjection/RikaSyliusBrandExtension.php
 
 declare(strict_types=1);
 
@@ -17,11 +16,14 @@ final class RikaSyliusBrandExtension extends AbstractResourceExtension implement
     {
         $config = $this->processConfiguration($this->getConfiguration([], $container), $configs);
         
+        // Définir le paramètre pour le répertoire d'upload
+        $container->setParameter('rika_sylius_brand.upload_dir', '%kernel.project_dir%/public/media/brand');
+        
         // Charger les services
         $loader = new YamlFileLoader($container, new FileLocator(__DIR__ . '/../Resources/config'));
         $loader->load('services.yaml');
 
-        // Configuration des ressources directement dans l'extension
+        // Configuration des ressources
         $this->registerResources('rika_sylius_brand', 'doctrine/orm', [
             'brand' => [
                 'classes' => [
@@ -43,7 +45,6 @@ final class RikaSyliusBrandExtension extends AbstractResourceExtension implement
 
     public function prepend(ContainerBuilder $container): void
     {
-        // Configurer Doctrine pour les mappings XML
         if ($container->hasExtension('doctrine')) {
             $container->prependExtensionConfig('doctrine', [
                 'orm' => [
