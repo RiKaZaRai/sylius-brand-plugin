@@ -6,7 +6,6 @@ namespace Rika\SyliusBrandPlugin\Entity;
 
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
-use Doctrine\ORM\Mapping as ORM;
 use Sylius\Component\Product\Model\ProductInterface;
 use Sylius\Resource\Model\ResourceInterface;
 use Sylius\Resource\Model\SlugAwareInterface;
@@ -15,9 +14,6 @@ use Sylius\Resource\Model\ToggleableTrait;
 use Sylius\Resource\Model\TranslatableTrait;
 use Sylius\Resource\Model\TranslationInterface;
 
-#[ORM\Entity]
-#[ORM\Table(name: 'rika_brand')]
-#[ORM\HasLifecycleCallbacks]
 class Brand implements BrandInterface, ResourceInterface, SlugAwareInterface
 {
     use TimestampableTrait;
@@ -27,33 +23,10 @@ class Brand implements BrandInterface, ResourceInterface, SlugAwareInterface
         getTranslation as private doGetTranslation;
     }
 
-    #[ORM\Id]
-    #[ORM\GeneratedValue]
-    #[ORM\Column(type: 'integer')]
     protected ?int $id = null;
-
-    #[ORM\Column(type: 'string', length: 255, unique: true)]
     protected ?string $code = null;
-
-    #[ORM\Column(type: 'string', length: 255, nullable: true)]
     protected ?string $logoPath = null;
-
-    #[ORM\Column(type: 'integer', nullable: true)]
     protected ?int $position = null;
-
-    #[ORM\OneToMany(
-        mappedBy: 'translatable',
-        targetEntity: BrandTranslation::class,
-        cascade: ['ALL'],
-        orphanRemoval: true
-    )]
-    protected Collection $translations;
-
-    #[ORM\OneToMany(
-        mappedBy: 'brand',
-        targetEntity: 'Sylius\Component\Core\Model\Product'
-    )]
-    #[ORM\OrderBy(['position' => 'ASC'])]
     protected Collection $products;
 
     public function __construct()
@@ -98,7 +71,6 @@ class Brand implements BrandInterface, ResourceInterface, SlugAwareInterface
         $this->position = $position;
     }
 
-    // ✅ Surcharge pour corriger la signature
     public function setEnabled(?bool $enabled): void
     {
         $this->enabled = $enabled ?? false;
