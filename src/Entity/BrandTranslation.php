@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Rika\SyliusBrandPlugin\Entity;
 
-use Sylius\Resource\Model\AbstractTranslation;  // ✅ Nouveau
+use Sylius\Resource\Model\AbstractTranslation;
 
 class BrandTranslation extends AbstractTranslation implements BrandTranslationInterface
 {
