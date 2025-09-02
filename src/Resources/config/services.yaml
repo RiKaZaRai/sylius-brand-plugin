@@ -1,19 +1,16 @@
 # src/Resources/config/services.yaml
 services:
-    # ------------------------------------------------------
-    # Defaults
-    # ------------------------------------------------------
     _defaults:
-        autowire: true      # Injection automatique des dépendances
-        autoconfigure: true # Tags automatiques comme kernel.event_listener
-        public: false       # Les services sont privés par défaut
+        autowire: true
+        autoconfigure: true
+        public: false
 
     # ------------------------------------------------------
     # Plugin services
     # ------------------------------------------------------
     Rika\SyliusBrandPlugin\:
         resource: '../*'
-        exclude: '../{DependencyInjection,Entity,Resources,Tests}'
+        exclude: '../{DependencyInjection,Entity,Resources,Tests,Controller}'
 
     # ------------------------------------------------------
     # Controllers
