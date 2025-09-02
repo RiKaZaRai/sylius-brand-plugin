@@ -56,14 +56,14 @@ final class RikaSyliusBrandExtension extends AbstractResourceExtension implement
                             'name' => 'doctrine/orm',
                             'options' => [
                                 'class' => 'Rika\SyliusBrandPlugin\Entity\Brand',
-                                'repository' => [
-                                    'method' => 'createListQueryBuilder',
-                                    'arguments' => ['%locale%'],
-                                ],
+                                //'repository' => [
+                                //    'method' => 'createListQueryBuilder',
+                                //    'arguments' => ['%locale%'],
+                                //],
                             ],
                         ],
                         'sorting' => [
-                            'code' => 'asc', // Tri par code au lieu de name
+                            'code' => 'asc', // Tri par défaut
                         ],
                         'fields' => [
                             'code' => [
