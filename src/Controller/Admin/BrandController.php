@@ -38,6 +38,12 @@ final class BrandController extends AbstractController
     public function create(Request $request): Response
     {
         $brand = new Brand();
+
+        // Définir la locale courante pour les traductions
+        $locale = $request->getLocale();
+        $brand->setCurrentLocale($locale);
+        $brand->setFallbackLocale($locale);
+
         $form = $this->createForm(BrandType::class, $brand);
 
         $form->handleRequest($request);
@@ -78,6 +84,12 @@ final class BrandController extends AbstractController
     #[Route('/{id}/edit', name: 'admin_brand_edit')]
     public function edit(Request $request, Brand $brand): Response
     {
+        
+        // Définir la locale courante pour les traductions
+        $locale = $request->getLocale();
+        $brand->setCurrentLocale($locale);
+        $brand->setFallbackLocale($locale);
+
         $form = $this->createForm(BrandType::class, $brand);
         $form->handleRequest($request);
 
