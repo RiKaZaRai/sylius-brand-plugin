@@ -1,0 +1,70 @@
+services:
+    _defaults:
+        autowire: true
+        autoconfigure: true
+        public: false
+
+    Rika\SyliusBrandPlugin\:
+        resource: '../../*'
+        exclude: '../../{Entity,Resources}'
+
+    # Repository
+    rika_sylius_brand.repository.brand:
+        class: Rika\SyliusBrandPlugin\Repository\BrandRepository
+        arguments:
+            - '@doctrine.orm.entity_manager'
+            - !service
+                class: Doctrine\ORM\Mapping\ClassMetadata
+                arguments:
+                    - 'Rika\SyliusBrandPlugin\Entity\Brand'
+        tags:
+            - { name: 'sylius.repository' }
+
+    # Form Extensions
+    rika_sylius_brand.form.extension.product_type:
+        class: Rika\SyliusBrandPlugin\Form\Extension\ProductTypeExtension
+        tags:
+            - { name: form.type_extension, extended_type: Sylius\Bundle\ProductBundle\Form\Type\ProductType }
+
+    # Form Types
+    rika_sylius_brand.form.type.brand:
+        class: Rika\SyliusBrandPlugin\Form\Type\BrandType
+        arguments:
+            - 'Rika\SyliusBrandPlugin\Entity\Brand'
+            - ['sylius']
+        tags:
+            - { name: form.type }
+
+    rika_sylius_brand.form.type.brand_translation:
+        class: Rika\SyliusBrandPlugin\Form\Type\BrandTranslationType
+        arguments:
+            - 'Rika\SyliusBrandPlugin\Entity\BrandTranslation'
+            - ['sylius']
+        tags:
+            - { name: form.type }
+
+    # Controllers
+    rika_sylius_brand.controller.shop.brand:
+        class: Rika\SyliusBrandPlugin\Controller\Shop\BrandController
+        arguments:
+            - '@rika_sylius_brand.repository.brand'
+            - '@sylius.context.locale'
+            - '@sylius.context.channel'
+        tags: ['controller.service_arguments']
+
+    # Menu
+    rika_sylius_brand.listener.admin.menu_builder:
+        class: Rika\SyliusBrandPlugin\Menu\AdminMenuListener
+        tags:
+            - { name: kernel.event_listener, event: sylius.menu.admin.main, method: addBrandMenu }
+
+    # Event Listeners
+    rika_sylius_brand.event_listener.brand:
+        class: Rika\SyliusBrandPlugin\EventListener\BrandEventListener
+        arguments:
+            - '@event_dispatcher'
+        tags:
+            - { name: kernel.event_listener, event: rika_sylius_brand.brand.pre_create, method: onBrandPreCreate }
+            - { name: kernel.event_listener, event: rika_sylius_brand.brand.post_create, method: onBrandPostCreate }
+            - { name: kernel.event_listener, event: rika_sylius_brand.brand.pre_update, method: onBrandPreUpdate }
+            - { name: kernel.event_listener, event: rika_sylius_brand.brand.post_update, method: onBrandPostUpdate }

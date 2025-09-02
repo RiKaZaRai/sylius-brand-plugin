@@ -1,0 +1,26 @@
+rika_sylius_brand:
+    ui:
+        brands: Brands
+        brand: Brand
+        manage_brands: Manage brands
+        new_brand: New brand
+        edit_brand: Edit brand
+        logo: Logo
+        no_logo: No logo
+        position: Position
+        products: Products
+    form:
+        brand:
+            code: Code
+            name: Name
+            slug: Slug
+            description: Description
+            enabled: Enabled
+            position: Position
+            logo: Logo
+            translations: Translations
+            meta_title: Meta title
+            meta_description: Meta description
+        product:
+            brand: Brand
+            select_brand: Select a brand

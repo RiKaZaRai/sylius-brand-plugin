@@ -1,0 +1,40 @@
+{% extends '@SyliusShop/layout.html.twig' %}
+
+{% block content %}
+<div class="ui container">
+    <div class="ui segment">
+        <div class="ui grid">
+            <div class="four wide column">
+                {% if brand.logoPath %}
+                    <img class="ui fluid image" src="{{ brand.logoPath|imagine_filter('sylius_shop_product_large_thumbnail') }}" alt="{{ brand.name }}">
+                {% endif %}
+            </div>
+            <div class="twelve wide column">
+                <h1 class="ui header">{{ brand.name }}</h1>
+                {% if brand.description %}
+                    <div class="ui segment">
+                        {{ brand.description|raw }}
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+
+    <h2 class="ui header">{{ 'rika_sylius_brand.ui.products'|trans }}</h2>
+    
+    <div class="ui four cards">
+        {% for product in products %}
+            {% include '@SyliusShop/Product/_box.html.twig' with {'product': product} %}
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}
+
+{% block metatags %}
+    {% if brand.metaTitle %}
+        <meta name="title" content="{{ brand.metaTitle }}">
+    {% endif %}
+    {% if brand.metaDescription %}
+        <meta name="description" content="{{ brand.metaDescription }}">
+    {% endif %}
+{% endblock %}

@@ -1,0 +1,34 @@
+{
+    "name": "rika/sylius-brand-plugin",
+    "type": "sylius-plugin",
+    "description": "Brand management plugin for Sylius by Rika",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Rika",
+            "email": "contact@rika.dev"
+        }
+    ],
+    "require": {
+        "php": "^8.4",
+        "sylius/sylius": "^2.1",
+        "symfony/framework-bundle": "^7.3"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "^10.0",
+        "friends-of-behat/symfony-extension": "^2.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "Rika\\SyliusBrandPlugin\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Tests\\Rika\\SyliusBrandPlugin\\": "tests/"
+        }
+    },
+    "extra": {
+        "sylius-plugin-class": "Rika\\SyliusBrandPlugin\\RikaSyliusBrandPlugin"
+    }
+}
