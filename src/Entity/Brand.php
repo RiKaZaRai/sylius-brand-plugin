@@ -7,13 +7,14 @@ namespace Rika\SyliusBrandPlugin\Entity;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Sylius\Component\Resource\Model\ResourceInterface;
+use Sylius\Component\Resource\Model\SlugAwareInterface;
 use Sylius\Resource\Model\TranslatableTrait;
 use Sylius\Resource\Model\TimestampableTrait;
-use Sylius\Component\Resource\Model\SlugAwareInterface;
 
 #[ORM\Entity]
 #[ORM\Table(name: 'rika_brand')]
-class Brand implements BrandInterface, SlugAwareInterface
+class Brand implements BrandInterface, ResourceInterface, SlugAwareInterface
 {
     use TranslatableTrait {
         __construct as private initializeTranslationsCollection;
