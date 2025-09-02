@@ -42,8 +42,6 @@ services:
         arguments:
             $dataClass: 'Rika\SyliusBrandPlugin\Entity\Brand'
             $validationGroups: ['sylius']
-            $locales: '%sylius.translation.locales%'
-            $defaultLocale: '%sylius.locale.default%'
         tags: ['form.type']
 
     Rika\SyliusBrandPlugin\Form\Type\BrandTranslationType:
@@ -58,3 +56,11 @@ services:
     Rika\SyliusBrandPlugin\Form\Extension\:
         resource: '../../Form/Extension'
         tags: ['form.type_extension']
+
+    # Listener pour générer automatiquement les slugs des marques
+    Rika\SyliusBrandPlugin\EventListener\BrandSlugListener:
+        arguments:
+            $slugger: '@slugger'
+        tags:
+            - { name: doctrine.event_listener, event: prePersist }
+            - { name: doctrine.event_listener, event: preUpdate }
