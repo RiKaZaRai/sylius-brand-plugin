@@ -6,11 +6,10 @@ namespace Rika\SyliusBrandPlugin\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use Sylius\Resource\Model\AbstractTranslation;
-use Sylius\Component\Resource\Model\SlugAwareInterface;
 
 #[ORM\Entity]
 #[ORM\Table(name: 'rika_brand_translation')]
-class BrandTranslation extends AbstractTranslation implements BrandTranslationInterface, SlugAwareInterface
+class BrandTranslation extends AbstractTranslation implements BrandTranslationInterface
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
@@ -20,6 +19,9 @@ class BrandTranslation extends AbstractTranslation implements BrandTranslationIn
     #[ORM\Column(type: 'string', length: 255)]
     protected ?string $name = null;
 
+    #[ORM\Column(type: 'string', length: 255, nullable: true)]
+    protected ?string $slug = null;
+
     #[ORM\Column(type: 'text', nullable: true)]
     protected ?string $description = null;
 
@@ -28,9 +30,6 @@ class BrandTranslation extends AbstractTranslation implements BrandTranslationIn
 
     #[ORM\Column(type: 'text', nullable: true)]
     protected ?string $metaDescription = null;
-
-    #[ORM\Column(type: 'string', length: 255, nullable: true)]
-    protected ?string $slug = null;
 
     public function getId(): ?int
     {
@@ -45,6 +44,16 @@ class BrandTranslation extends AbstractTranslation implements BrandTranslationIn
     public function setName(?string $name): void
     {
         $this->name = $name;
+    }
+
+    public function getSlug(): ?string
+    {
+        return $this->slug;
+    }
+
+    public function setSlug(?string $slug): void
+    {
+        $this->slug = $slug;
     }
 
     public function getDescription(): ?string
@@ -75,15 +84,5 @@ class BrandTranslation extends AbstractTranslation implements BrandTranslationIn
     public function setMetaDescription(?string $metaDescription): void
     {
         $this->metaDescription = $metaDescription;
-    }
-
-    public function getSlug(): ?string
-    {
-        return $this->slug;
-    }
-
-    public function setSlug(?string $slug): void
-    {
-        $this->slug = $slug;
     }
 }

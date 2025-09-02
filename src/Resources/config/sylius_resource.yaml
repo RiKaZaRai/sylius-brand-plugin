@@ -4,9 +4,10 @@ sylius_resource:
             driver: doctrine/orm
             classes:
                 model: Rika\SyliusBrandPlugin\Entity\Brand
-                form: Rika\SyliusBrandPlugin\Form\Type\BrandType
                 interface: Rika\SyliusBrandPlugin\Entity\BrandInterface
+                form: Rika\SyliusBrandPlugin\Form\Type\BrandType
             translation:
                 classes:
                     model: Rika\SyliusBrandPlugin\Entity\BrandTranslation
                     interface: Rika\SyliusBrandPlugin\Entity\BrandTranslationInterface
+                fields: [name, description, slug, metaKeywords, metaDescription]
