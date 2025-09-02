@@ -4,16 +4,35 @@ declare(strict_types=1);
 
 namespace Rika\SyliusBrandPlugin\Entity;
 
-use Sylius\Resource\Model\AbstractTranslation;
+use Doctrine\ORM\Mapping as ORM;
+use Sylius\Component\Resource\Model\AbstractTranslation;
+use Sylius\Component\Resource\Model\SlugAwareInterface;
+use Gedmo\Mapping\Annotation as Gedmo;
 
-class BrandTranslation extends AbstractTranslation implements BrandTranslationInterface
+#[ORM\Entity]
+#[ORM\Table(name: 'rika_brand_translation')]
+class BrandTranslation extends AbstractTranslation implements BrandTranslationInterface, SlugAwareInterface
 {
+    #[ORM\Id]
+    #[ORM\GeneratedValue]
+    #[ORM\Column(type: 'integer')]
     protected ?int $id = null;
+
+    #[ORM\Column(type: 'string', length: 255)]
     protected ?string $name = null;
-    protected ?string $slug = null;
+
+    #[ORM\Column(type: 'text', nullable: true)]
     protected ?string $description = null;
-    protected ?string $metaTitle = null;
+
+    #[ORM\Column(type: 'text', nullable: true)]
+    protected ?string $metaKeywords = null;
+
+    #[ORM\Column(type: 'text', nullable: true)]
     protected ?string $metaDescription = null;
+
+    #[ORM\Column(type: 'string', length: 255, unique: true)]
+    #[Gedmo\Slug(fields: ['name'])]
+    protected ?string $slug = null;
 
     public function getId(): ?int
     {
@@ -30,16 +49,6 @@ class BrandTranslation extends AbstractTranslation implements BrandTranslationIn
         $this->name = $name;
     }
 
-    public function getSlug(): ?string
-    {
-        return $this->slug;
-    }
-
-    public function setSlug(?string $slug): void
-    {
-        $this->slug = $slug;
-    }
-
     public function getDescription(): ?string
     {
         return $this->description;
@@ -50,14 +59,14 @@ class BrandTranslation extends AbstractTranslation implements BrandTranslationIn
         $this->description = $description;
     }
 
-    public function getMetaTitle(): ?string
+    public function getMetaKeywords(): ?string
     {
-        return $this->metaTitle;
+        return $this->metaKeywords;
     }
 
-    public function setMetaTitle(?string $metaTitle): void
+    public function setMetaKeywords(?string $metaKeywords): void
     {
-        $this->metaTitle = $metaTitle;
+        $this->metaKeywords = $metaKeywords;
     }
 
     public function getMetaDescription(): ?string
@@ -68,5 +77,15 @@ class BrandTranslation extends AbstractTranslation implements BrandTranslationIn
     public function setMetaDescription(?string $metaDescription): void
     {
         $this->metaDescription = $metaDescription;
+    }
+
+    public function getSlug(): ?string
+    {
+        return $this->slug;
+    }
+
+    public function setSlug(?string $slug): void
+    {
+        $this->slug = $slug;
     }
 }
