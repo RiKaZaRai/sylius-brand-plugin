@@ -5,42 +5,19 @@ sylius_grid:
                 name: doctrine/orm
                 options:
                     class: Rika\SyliusBrandPlugin\Entity\Brand
-                    repository:
-                        method: createListQueryBuilder
-                        arguments:
-                            - "%locale%"
-            sorting:
-                position: asc
             fields:
-                logo:
-                    type: twig
-                    label: rika_sylius_brand.ui.logo
-                    template: "@RikaSyliusBrandPlugin/Admin/Brand/Grid/Field/logo.html.twig"
-                code:
-                    type: string
-                    label: sylius.ui.code
-                    sortable: ~
                 name:
                     type: string
-                    label: sylius.ui.name
-                    sortable: translation.name
-                enabled:
-                    type: twig
-                    label: sylius.ui.enabled
-                    template: "@SyliusUi/Grid/Field/enabled.html.twig"
-                position:
-                    type: string
-                    label: rika_sylius_brand.ui.position
+                    label: rika_sylius_brand_plugin.ui.name
                     sortable: ~
-            filters:
-                search:
-                    type: string
-                    label: sylius.ui.search
+                logo:
+                    type: twig
+                    label: rika_sylius_brand_plugin.ui.logo
                     options:
-                        fields: [code, translation.name]
-                enabled:
-                    type: boolean
-                    label: sylius.ui.enabled
+                        template: "@RikaSyliusBrandPlugin/Admin/Brand/Grid/Field/logo.html.twig"
+                description:
+                    type: string
+                    label: rika_sylius_brand_plugin.ui.description
             actions:
                 main:
                     create:
