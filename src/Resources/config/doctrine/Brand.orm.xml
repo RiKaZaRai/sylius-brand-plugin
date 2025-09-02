@@ -16,6 +16,15 @@
         <field name="createdAt" type="datetime" nullable="true"/>
         <field name="updatedAt" type="datetime" nullable="true"/>
 
+        <!-- Translations -->
+        <one-to-many field="translations" target-entity="Rika\SyliusBrandPlugin\Entity\BrandTranslation" 
+                     mapped-by="translatable" cascade="ALL" orphan-removal="true">
+            <cascade>
+                <cascade-all/>
+            </cascade>
+        </one-to-many>
+
+        <!-- Products relation -->
         <one-to-many field="products" target-entity="Sylius\Component\Core\Model\ProductInterface" mapped-by="brand">
             <order-by>
                 <order-by-field name="position" direction="ASC"/>

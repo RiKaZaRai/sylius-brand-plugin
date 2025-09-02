@@ -1,25 +1,17 @@
-# src/Resources/config/services.yaml
 services:
-    _defaults:
-        autowire: true
-        autoconfigure: true
-        public: false
-
-    Rika\SyliusBrandPlugin\:
-        resource: '../../*'
-        exclude: '../../{Entity,Resources,Repository}'
-
-    # Form Types avec configuration explicite
-    Rika\SyliusBrandPlugin\Form\Type\BrandType:
-        arguments:
-            $dataClass: 'Rika\SyliusBrandPlugin\Entity\Brand'
-            $validationGroups: ['sylius']
+    # Product mapping listener
+    rika_sylius_brand.event_listener.product_mapping:
+        class: Rika\SyliusBrandPlugin\EventListener\ProductMappingListener
         tags:
-            - { name: form.type }
+            - { name: doctrine.event_listener, event: loadClassMetadata }
 
-    Rika\SyliusBrandPlugin\Form\Type\BrandTranslationType:
+    # Brand event listener
+    rika_sylius_brand.event_listener.brand:
+        class: Rika\SyliusBrandPlugin\EventListener\BrandEventListener
         arguments:
-            $dataClass: 'Rika\SyliusBrandPlugin\Entity\BrandTranslation'
-            $validationGroups: ['sylius']
+            - '@event_dispatcher'
         tags:
-            - { name: form.type }
+            - { name: kernel.event_listener, event: 'sylius.brand.pre_create', method: onBrandPreCreate }
+            - { name: kernel.event_listener, event: 'sylius.brand.post_create', method: onBrandPostCreate }
+            - { name: kernel.event_listener, event: 'sylius.brand.pre_update', method: onBrandPreUpdate }
+            - { name: kernel.event_listener, event: 'sylius.brand.post_update', method: onBrandPostUpdate }

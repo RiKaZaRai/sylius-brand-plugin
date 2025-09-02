@@ -4,33 +4,16 @@ declare(strict_types=1);
 
 namespace Rika\SyliusBrandPlugin\Entity;
 
-use Doctrine\DBAL\Types\Types;
-use Doctrine\ORM\Mapping as ORM;
-use Sylius\Resource\Model\AbstractTranslation;
+use Sylius\Resource\Model\AbstractTranslation;  // ✅ Nouveau
 
-#[ORM\Entity]
-#[ORM\Table(name: 'rika_brand_translation')]
 class BrandTranslation extends AbstractTranslation implements BrandTranslationInterface
 {
-    #[ORM\Id]
-    #[ORM\GeneratedValue]
-    #[ORM\Column(type: Types::INTEGER)]
-    private ?int $id = null;
-
-    #[ORM\Column(type: Types::STRING, length: 255, nullable: true)]
-    private ?string $name = null;
-
-    #[ORM\Column(type: Types::STRING, length: 255, nullable: true)]
-    private ?string $slug = null;
-
-    #[ORM\Column(type: Types::TEXT, nullable: true)]
-    private ?string $description = null;
-
-    #[ORM\Column(type: Types::STRING, length: 255, nullable: true)]
-    private ?string $metaTitle = null;
-
-    #[ORM\Column(type: Types::TEXT, nullable: true)]
-    private ?string $metaDescription = null;
+    protected ?int $id = null;
+    protected ?string $name = null;
+    protected ?string $slug = null;
+    protected ?string $description = null;
+    protected ?string $metaTitle = null;
+    protected ?string $metaDescription = null;
 
     public function getId(): ?int
     {

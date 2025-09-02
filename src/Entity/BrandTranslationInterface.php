@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace Rika\SyliusBrandPlugin\Entity;
 
-use Sylius\Resource\Model\ResourceInterface;      // ✅ Nouveau namespace
-use Sylius\Resource\Model\TranslationInterface;   // ✅ Nouveau namespace
+use Sylius\Resource\Model\ResourceInterface;      // ✅ Nouveau
+use Sylius\Resource\Model\TranslationInterface;   // ✅ Nouveau
 
 interface BrandTranslationInterface extends ResourceInterface, TranslationInterface
 {

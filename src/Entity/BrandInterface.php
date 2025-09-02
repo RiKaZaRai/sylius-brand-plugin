@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace Rika\SyliusBrandPlugin\Entity;
 
-use Sylius\Resource\Model\ResourceInterface;
-use Sylius\Resource\Model\TranslatableInterface;
-use Sylius\Resource\Model\TimestampableInterface;
+use Sylius\Resource\Model\ResourceInterface;        // ✅ Nouveau
+use Sylius\Resource\Model\TranslatableInterface;    // ✅ Nouveau  
+use Sylius\Resource\Model\TimestampableInterface;   // ✅ Nouveau
 
 interface BrandInterface extends ResourceInterface, TranslatableInterface, TimestampableInterface
 {
@@ -18,10 +18,6 @@ interface BrandInterface extends ResourceInterface, TranslatableInterface, Times
     public function setSlug(?string $slug): void;
     public function getDescription(): ?string;
     public function setDescription(?string $description): void;
-    public function getLogoPath(): ?string;
-    public function setLogoPath(?string $logoPath): void;
-    public function isEnabled(): bool;
+    public function getEnabled(): bool;
     public function setEnabled(bool $enabled): void;
-    public function getPosition(): ?int;
-    public function setPosition(?int $position): void;
 }
