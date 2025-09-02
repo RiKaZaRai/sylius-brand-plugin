@@ -15,6 +15,11 @@ class BrandTranslation extends AbstractTranslation implements BrandTranslationIn
     private ?string $metaKeywords = null;
     private ?string $metaDescription = null;
 
+    public function getId(): ?int
+    {
+        return $this->id;
+    }
+
     public function id(): ?int
     {
         return $this->id;
