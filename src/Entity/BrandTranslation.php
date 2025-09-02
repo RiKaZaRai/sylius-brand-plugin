@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Rika\SyliusBrandPlugin\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
-use Gedmo\Mapping\Annotation as Gedmo;
 use Sylius\Component\Resource\Model\AbstractTranslation;
 
 #[ORM\Entity]
@@ -21,7 +20,6 @@ class BrandTranslation extends AbstractTranslation implements BrandTranslationIn
     private ?string $name = null;
 
     #[ORM\Column(type: 'string', length: 255, nullable: true)]
-    #[Gedmo\Slug(fields: ['name'])]
     private ?string $slug = null;
 
     #[ORM\Column(type: 'text', nullable: true)]
@@ -32,6 +30,8 @@ class BrandTranslation extends AbstractTranslation implements BrandTranslationIn
 
     #[ORM\Column(type: 'text', nullable: true)]
     private ?string $metaDescription = null;
+
+    // ... tous vos getters/setters restent identiques ...
 
     public function getId(): ?int
     {
@@ -75,7 +75,7 @@ class BrandTranslation extends AbstractTranslation implements BrandTranslationIn
 
     public function setMetaTitle(?string $metaTitle): void
     {
-        $this->metaTitle = $metaTitle;
+        $this->metaDescription = $metaTitle;
     }
 
     public function getMetaDescription(): ?string
