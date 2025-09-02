@@ -6,7 +6,7 @@ services:
 
     Rika\SyliusBrandPlugin\:
         resource: '../../*'
-        exclude: '../../{DependencyInjection,Entity,Tests}'
+        exclude: '../../{DependencyInjection,Entity,Tests,Form}'
 
     Rika\SyliusBrandPlugin\Controller\:
         resource: '../../Controller'
@@ -38,8 +38,20 @@ services:
         tags:
             - { name: kernel.event_listener, event: sylius.menu.admin.main, method: __invoke }
 
-    Rika\SyliusBrandPlugin\Form\Type\:
-        resource: '../../Form/Type'
+    # Configuration explicite des formulaires
+    Rika\SyliusBrandPlugin\Form\Type\BrandType:
+        arguments:
+            $dataClass: 'Rika\SyliusBrandPlugin\Entity\Brand'
+            $validationGroups: ['sylius']
+        tags: ['form.type']
+
+    Rika\SyliusBrandPlugin\Form\Type\BrandTranslationType:
+        arguments:
+            $dataClass: 'Rika\SyliusBrandPlugin\Entity\BrandTranslation'
+            $validationGroups: ['sylius']
+        tags: ['form.type']
+
+    Rika\SyliusBrandPlugin\Form\Type\BrandChoiceType:
         tags: ['form.type']
 
     Rika\SyliusBrandPlugin\Form\Extension\:
