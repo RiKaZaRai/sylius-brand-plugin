@@ -5,12 +5,21 @@ declare(strict_types=1);
 
 namespace Rika\SyliusBrandPlugin\EventListener;
 
+use Doctrine\Common\EventSubscriber;
 use Doctrine\ORM\Event\LoadClassMetadataEventArgs;
+use Doctrine\ORM\Events;
 use Rika\SyliusBrandPlugin\Entity\BrandInterface;
 use Sylius\Component\Product\Model\ProductInterface;
 
-final class ProductMappingListener
+final class ProductMappingListener implements EventSubscriber
 {
+    public function getSubscribedEvents(): array
+    {
+        return [
+            Events::loadClassMetadata,
+        ];
+    }
+
     public function loadClassMetadata(LoadClassMetadataEventArgs $eventArgs): void
     {
         $classMetadata = $eventArgs->getClassMetadata();
@@ -36,18 +45,5 @@ final class ProductMappingListener
                 'onDelete' => 'SET NULL',
             ]],
         ]);
-
-        // Ajouter les méthodes getter et setter dynamiquement
-        $this->addBrandMethodsToProduct($classMetadata);
-    }
-
-    private function addBrandMethodsToProduct($classMetadata): void
-    {
-        // Cette méthode est appelée pour s'assurer que les méthodes brand 
-        // sont disponibles sur l'entité Product
-        
-        // Note: En réalité, Doctrine ORM gère automatiquement les getters/setters
-        // pour les associations mappées, donc cette méthode peut rester vide
-        // ou être utilisée pour des customisations spécifiques si nécessaire
     }
 }

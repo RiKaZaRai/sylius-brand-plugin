@@ -4,23 +4,14 @@ services:
         autowire: true
         autoconfigure: true
 
-    # ------------------------------------------------------
-    # Plugin services
-    # ------------------------------------------------------
     Rika\SyliusBrandPlugin\:
         resource: '../../*'
         exclude: '../../{DependencyInjection,Entity,Tests}'
 
-    # ------------------------------------------------------
-    # Controllers
-    # ------------------------------------------------------
     Rika\SyliusBrandPlugin\Controller\:
         resource: '../../Controller'
         tags: ['controller.service_arguments']
 
-    # ------------------------------------------------------
-    # EventListeners
-    # ------------------------------------------------------
     Rika\SyliusBrandPlugin\EventListener\BrandEventListener:
         arguments:
             $uploadDir: '%kernel.project_dir%/public/uploads/brands'
@@ -28,20 +19,15 @@ services:
             - { name: kernel.event_listener, event: 'sylius.brand.pre_create', method: uploadLogo }
             - { name: kernel.event_listener, event: 'sylius.brand.pre_update', method: uploadLogo }
 
+    # Changé en event_subscriber avec priorité haute
     Rika\SyliusBrandPlugin\EventListener\ProductMappingListener:
         tags:
-            - { name: doctrine.event_listener, event: loadClassMetadata }
+            - { name: doctrine.event_subscriber, priority: 100 }
 
-    # ------------------------------------------------------
-    # Menu
-    # ------------------------------------------------------
     Rika\SyliusBrandPlugin\Menu\AdminMenuListener:
         tags:
             - { name: kernel.event_listener, event: sylius.menu.admin.main, method: addBrandMenu }
 
-    # ------------------------------------------------------
-    # Forms
-    # ------------------------------------------------------
     Rika\SyliusBrandPlugin\Form\Type\:
         resource: '../../Form/Type'
         tags: ['form.type']
@@ -49,4 +35,3 @@ services:
     Rika\SyliusBrandPlugin\Form\Extension\:
         resource: '../../Form/Extension'
         tags: ['form.type_extension']
-
