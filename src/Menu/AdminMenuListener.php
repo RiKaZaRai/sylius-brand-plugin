@@ -17,9 +17,9 @@ final class AdminMenuListener
         if (null !== $catalog) {
             $catalog
                 ->addChild('brands', [
-                    'route' => 'rika_admin_brand_index',
+                    'route' => 'rika_sylius_brand_admin_brand_index', // Route corrigée !
                 ])
-                ->setLabel('rika_sylius_brand.ui.brands') // Changé ici !
+                ->setLabel('rika_sylius_brand.ui.brands')
                 ->setLabelAttribute('icon', 'trademark');
         }
     }

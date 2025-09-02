@@ -19,32 +19,23 @@ final class RikaSyliusBrandExtension extends AbstractResourceExtension implement
         // Définir le paramètre pour le répertoire d'upload
         $container->setParameter('rika_sylius_brand.upload_dir', '%kernel.project_dir%/public/media/brand');
         
-        // Charger les services
+        // Charger les fichiers de configuration
         $loader = new YamlFileLoader($container, new FileLocator(__DIR__ . '/../Resources/config'));
         $loader->load('services.yaml');
-
-        // Configuration des ressources
-        $this->registerResources('rika_sylius_brand', 'doctrine/orm', [
-            'brand' => [
-                'classes' => [
-                    'model' => 'Rika\SyliusBrandPlugin\Entity\Brand',
-                    'interface' => 'Rika\SyliusBrandPlugin\Entity\BrandInterface',
-                    'repository' => 'Rika\SyliusBrandPlugin\Repository\BrandRepository',
-                    'form' => 'Rika\SyliusBrandPlugin\Form\Type\BrandType',
-                ],
-                'translation' => [
-                    'classes' => [
-                        'model' => 'Rika\SyliusBrandPlugin\Entity\BrandTranslation',
-                        'interface' => 'Rika\SyliusBrandPlugin\Entity\BrandTranslationInterface',
-                        'form' => 'Rika\SyliusBrandPlugin\Form\Type\BrandTranslationType',
-                    ],
-                ],
-            ],
-        ], $container);
+        $loader->load('sylius_resource.yaml');
+        
+        // Charger les grilles si elles existent
+        if (file_exists(__DIR__ . '/../Resources/config/grids/admin_brand.yaml')) {
+            $loader->load('grids/admin_brand.yaml');
+        }
+        if (file_exists(__DIR__ . '/../Resources/config/sylius_grid.yaml')) {
+            $loader->load('sylius_grid.yaml');
+        }
     }
 
     public function prepend(ContainerBuilder $container): void
     {
+        // Configuration Doctrine
         if ($container->hasExtension('doctrine')) {
             $container->prependExtensionConfig('doctrine', [
                 'orm' => [
