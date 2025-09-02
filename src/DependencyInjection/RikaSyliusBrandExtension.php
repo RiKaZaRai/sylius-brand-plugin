@@ -16,27 +16,34 @@ final class RikaSyliusBrandExtension extends Extension implements PrependExtensi
 {
     public function load(array $configs, ContainerBuilder $container): void
     {
+        // Traiter la configuration si elle existe
         $configuration = $this->getConfiguration([], $container);
         if ($configuration instanceof ConfigurationInterface) {
-            $config = $this->processConfiguration($configuration, $configs);
+            $this->processConfiguration($configuration, $configs);
         }
 
+        // Charger uniquement les fichiers YAML existants dans Resources/config
         $loader = new YamlFileLoader($container, new FileLocator(__DIR__ . '/../Resources/config'));
-        $loader->load('services.yaml');
+        $yamlFiles = ['services.yaml', 'sylius_resource.yaml']; // liste explicite
+        foreach ($yamlFiles as $file) {
+            if (file_exists(__DIR__ . '/../Resources/config/' . $file)) {
+                $loader->load($file);
+            }
+        }
     }
 
     public function prepend(ContainerBuilder $container): void
     {
-        // Configuration Doctrine pour les mappings
+        // Configurer Doctrine pour les mappings XML de ton plugin
         if ($container->hasExtension('doctrine')) {
             $container->prependExtensionConfig('doctrine', [
                 'orm' => [
                     'mappings' => [
                         'RikaSyliusBrandPlugin' => [
-                            'type' => 'xml',
-                            'dir' => __DIR__ . '/../Resources/config/doctrine',
+                            'type'   => 'xml',
+                            'dir'    => __DIR__ . '/../Resources/config/doctrine',
                             'prefix' => 'Rika\SyliusBrandPlugin\Entity',
-                            'alias' => 'RikaSyliusBrandPlugin',
+                            'alias'  => 'RikaSyliusBrandPlugin',
                         ],
                     ],
                 ],
