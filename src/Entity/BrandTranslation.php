@@ -5,13 +5,13 @@ declare(strict_types=1);
 namespace Rika\SyliusBrandPlugin\Entity;
 
 use Sylius\Resource\Model\AbstractTranslation;
-use Sylius\Resource\Model\TranslatableInterface;
 
 class BrandTranslation extends AbstractTranslation implements BrandTranslationInterface
 {
     private ?int $id = null;
     
-    protected ?TranslatableInterface $translatable = null; // ← Changez le type ici
+    // ❌ NE PAS REDÉCLARER cette propriété, elle existe déjà dans AbstractTranslation
+    // protected ?BrandInterface $translatable = null; 
     
     private ?string $name = null;
     
@@ -54,7 +54,7 @@ class BrandTranslation extends AbstractTranslation implements BrandTranslationIn
         $this->description = $description;
     }
 
-    // Méthode helper pour obtenir le Brand typé
+    // ✅ Méthode helper pour avoir le bon type
     public function getBrand(): ?BrandInterface
     {
         /** @var BrandInterface|null $translatable */
@@ -63,7 +63,7 @@ class BrandTranslation extends AbstractTranslation implements BrandTranslationIn
         return $translatable;
     }
     
-    // Méthodes de compatibilité si nécessaire
+    // Méthodes de compatibilité pour les getters classiques
     public function getName(): ?string
     {
         return $this->name();
