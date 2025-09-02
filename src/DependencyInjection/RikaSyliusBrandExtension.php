@@ -22,15 +22,30 @@ final class RikaSyliusBrandExtension extends AbstractResourceExtension implement
         // Charger les fichiers de configuration
         $loader = new YamlFileLoader($container, new FileLocator(__DIR__ . '/../Resources/config'));
         $loader->load('services.yaml');
-        $loader->load('sylius_resource.yaml');
         
-        // Charger les grilles si elles existent
+        // Charger les grilles
         if (file_exists(__DIR__ . '/../Resources/config/grids/admin_brand.yaml')) {
             $loader->load('grids/admin_brand.yaml');
         }
-        if (file_exists(__DIR__ . '/../Resources/config/sylius_grid.yaml')) {
-            $loader->load('sylius_grid.yaml');
-        }
+
+        // Configuration des ressources UNIQUEMENT via registerResources()
+        $this->registerResources('rika_sylius_brand', 'doctrine/orm', [
+            'brand' => [
+                'classes' => [
+                    'model' => 'Rika\SyliusBrandPlugin\Entity\Brand',
+                    'interface' => 'Rika\SyliusBrandPlugin\Entity\BrandInterface',
+                    'repository' => 'Rika\SyliusBrandPlugin\Repository\BrandRepository',
+                    'form' => 'Rika\SyliusBrandPlugin\Form\Type\BrandType',
+                ],
+                'translation' => [
+                    'classes' => [
+                        'model' => 'Rika\SyliusBrandPlugin\Entity\BrandTranslation',
+                        'interface' => 'Rika\SyliusBrandPlugin\Entity\BrandTranslationInterface',
+                        'form' => 'Rika\SyliusBrandPlugin\Form\Type\BrandTranslationType',
+                    ],
+                ],
+            ],
+        ], $container);
     }
 
     public function prepend(ContainerBuilder $container): void
