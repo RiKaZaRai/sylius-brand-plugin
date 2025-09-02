@@ -9,7 +9,7 @@ use Sylius\Bundle\UiBundle\Menu\Event\MenuBuilderEvent;
 
 final class AdminMenuListener
 {
-    public function __invoke(MenuBuilderEvent $event): void // Changé ici !
+    public function __invoke(MenuBuilderEvent $event): void
     {
         $menu = $event->getMenu();
 
@@ -19,7 +19,7 @@ final class AdminMenuListener
                 ->addChild('brands', [
                     'route' => 'rika_admin_brand_index',
                 ])
-                ->setLabel('rika.menu.admin.main.catalog.brands')
+                ->setLabel('rika_sylius_brand.ui.brands') // Changé ici !
                 ->setLabelAttribute('icon', 'trademark');
         }
     }
