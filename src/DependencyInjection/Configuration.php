@@ -58,7 +58,7 @@ final class Configuration implements ConfigurationInterface
                                                 ->scalarNode('model')->defaultValue('Rika\SyliusBrandPlugin\Entity\BrandTranslation')->cannotBeEmpty()->end()
                                                 ->scalarNode('interface')->defaultValue('Rika\SyliusBrandPlugin\Entity\BrandTranslationInterface')->end()
                                                 ->scalarNode('controller')->defaultValue('Sylius\Bundle\ResourceBundle\Controller\ResourceController')->end()
-                                                ->scalarNode('repository')->end()
+                                                ->scalarNode('repository')->cannotBeEmpty()->end()
                                                 ->scalarNode('form')->defaultValue('Rika\SyliusBrandPlugin\Form\Type\BrandTranslationType')->cannotBeEmpty()->end()
                                             ->end()
                                         ->end()

@@ -9,6 +9,7 @@ use Sylius\Resource\Model\AbstractTranslation;
 
 #[ORM\Entity]
 #[ORM\Table(name: 'rika_brand_translation')]
+#[ORM\Index(name: 'brand_translation_uniq_trans', columns: ['translatable_id', 'locale'])]
 class BrandTranslation extends AbstractTranslation implements BrandTranslationInterface
 {
     #[ORM\Id]
@@ -30,6 +31,11 @@ class BrandTranslation extends AbstractTranslation implements BrandTranslationIn
 
     #[ORM\Column(type: 'text', nullable: true)]
     protected ?string $metaDescription = null;
+
+    // IMPORTANT : La relation avec l'entité Brand
+    #[ORM\ManyToOne(targetEntity: Brand::class, inversedBy: 'translations')]
+    #[ORM\JoinColumn(name: 'translatable_id', referencedColumnName: 'id', onDelete: 'CASCADE')]
+    protected ?BrandInterface $translatable = null;
 
     public function getId(): ?int
     {

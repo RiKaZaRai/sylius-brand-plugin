@@ -1,0 +1,12 @@
+# Configuration pour les traductions
+sylius_resource:
+    resources:
+        rika_sylius_brand.brand:
+            classes:
+                model: Rika\SyliusBrandPlugin\Entity\Brand
+                form: Rika\SyliusBrandPlugin\Form\Type\BrandType
+                repository: Sylius\Bundle\ResourceBundle\Doctrine\ORM\EntityRepository
+            translation:
+                classes:
+                    model: Rika\SyliusBrandPlugin\Entity\BrandTranslation
+                    form: Rika\SyliusBrandPlugin\Form\Type\BrandTranslationType

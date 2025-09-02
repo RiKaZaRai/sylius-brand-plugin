@@ -12,17 +12,18 @@ services:
         resource: '../../Controller'
         tags: ['controller.service_arguments']
 
-    # Services manquants générés manuellement
+    # Factories pour les ressources Sylius
     rika_sylius_brand.factory.brand:
-        class: Sylius\Component\Resource\Factory\Factory
+        class: Sylius\Resource\Factory\Factory
         arguments:
             - 'Rika\SyliusBrandPlugin\Entity\Brand'
 
     rika_sylius_brand.factory.brand_translation:
-        class: Sylius\Component\Resource\Factory\Factory
+        class: Sylius\Resource\Factory\Factory
         arguments:
             - 'Rika\SyliusBrandPlugin\Entity\BrandTranslation'
 
+    # Event listeners
     Rika\SyliusBrandPlugin\EventListener\BrandEventListener:
         arguments:
             $uploadDir: '%rika_sylius_brand.upload_dir%'
@@ -38,22 +39,34 @@ services:
         tags:
             - { name: kernel.event_listener, event: sylius.menu.admin.main, method: __invoke }
 
-    # Configuration explicite des formulaires
+    # Configuration des formulaires
     Rika\SyliusBrandPlugin\Form\Type\BrandType:
         arguments:
             $dataClass: 'Rika\SyliusBrandPlugin\Entity\Brand'
             $validationGroups: ['sylius']
-        tags: ['form.type']
+        tags: 
+            - { name: 'form.type' }
 
     Rika\SyliusBrandPlugin\Form\Type\BrandTranslationType:
         arguments:
             $dataClass: 'Rika\SyliusBrandPlugin\Entity\BrandTranslation'
             $validationGroups: ['sylius']
-        tags: ['form.type']
+        tags: 
+            - { name: 'form.type' }
 
     Rika\SyliusBrandPlugin\Form\Type\BrandChoiceType:
-        tags: ['form.type']
+        tags: 
+            - { name: 'form.type' }
 
     # Extensions de formulaires
     Rika\SyliusBrandPlugin\Form\Extension\ProductTypeExtension:
-        tags: ['form.type_extension']
+        tags:
+            - { name: 'form.type_extension', extended_type: 'Sylius\Bundle\ProductBundle\Form\Type\ProductType' }
+
+    # Repository manager si nécessaire
+    rika_sylius_brand.manager.brand:
+        alias: 'doctrine.orm.entity_manager'
+
+    # Configuration du translatable pour assurer le bon fonctionnement
+    rika_sylius_brand.context.locale:
+        alias: 'sylius.context.locale'
