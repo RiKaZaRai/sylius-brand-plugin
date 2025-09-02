@@ -9,17 +9,17 @@ use Sylius\Bundle\UiBundle\Menu\Event\MenuBuilderEvent;
 
 final class AdminMenuListener
 {
-    public function __invoke(MenuBuilderEvent $event): void
+    public function addAdminMenuItems(MenuBuilderEvent $event): void
     {
         $menu = $event->getMenu();
 
-        /** @var ItemInterface $catalogMenu */
-        $catalogMenu = $menu->getChild('catalog');
-
-        if (null !== $catalogMenu) {
-            $catalogMenu
-                ->addChild('brands', ['route' => 'rika_sylius_brand_plugin_admin_brand_index'])
-                ->setLabel('rika_sylius_brand_plugin.ui.brands')
+        $catalog = $menu->getChild('catalog');
+        if (null !== $catalog) {
+            $catalog
+                ->addChild('brands', [
+                    'route' => 'rika_admin_brand_index', // Changé ici !
+                ])
+                ->setLabel('rika.menu.admin.main.catalog.brands')
                 ->setLabelAttribute('icon', 'trademark');
         }
     }
