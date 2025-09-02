@@ -1,4 +1,3 @@
-# src/Resources/config/services.yaml
 services:
     _defaults:
         autowire: true
@@ -43,6 +42,8 @@ services:
         arguments:
             $dataClass: 'Rika\SyliusBrandPlugin\Entity\Brand'
             $validationGroups: ['sylius']
+            $locales: '%sylius.translation.locales%'
+            $defaultLocale: '%sylius.locale.default%'
         tags: ['form.type']
 
     Rika\SyliusBrandPlugin\Form\Type\BrandTranslationType:
