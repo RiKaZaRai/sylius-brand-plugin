@@ -50,6 +50,3 @@ services:
         resource: '../../Form/Extension'
         tags: ['form.type_extension']
 
-    Rika\SyliusBrandPlugin\EventListener\ProductBrandListener:
-        tags:
-            - { name: doctrine.event_subscriber }
