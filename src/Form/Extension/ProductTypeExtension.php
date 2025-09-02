@@ -18,7 +18,6 @@ final class ProductTypeExtension extends AbstractTypeExtension
             'required' => false,
             'label' => 'rika_sylius_brand_plugin.ui.brand',
             'placeholder' => 'rika_sylius_brand_plugin.ui.choose_brand',
-            'mapped' => false, // TEMPORAIRE : désactive le mapping automatique
         ]);
     }
 

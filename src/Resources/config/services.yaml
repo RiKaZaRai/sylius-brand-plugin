@@ -19,7 +19,6 @@ services:
             - { name: kernel.event_listener, event: 'sylius.brand.pre_create', method: uploadLogo }
             - { name: kernel.event_listener, event: 'sylius.brand.pre_update', method: uploadLogo }
 
-    # Changé en event_subscriber avec priorité haute
     Rika\SyliusBrandPlugin\EventListener\ProductMappingListener:
         tags:
             - { name: doctrine.event_subscriber, priority: 100 }
@@ -28,6 +27,7 @@ services:
         tags:
             - { name: kernel.event_listener, event: sylius.menu.admin.main, method: addBrandMenu }
 
+    # Assurez-vous que les types de formulaire sont bien taggés
     Rika\SyliusBrandPlugin\Form\Type\:
         resource: '../../Form/Type'
         tags: ['form.type']
