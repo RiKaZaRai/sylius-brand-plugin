@@ -4,11 +4,14 @@ declare(strict_types=1);
 
 namespace Rika\SyliusBrandPlugin\DependencyInjection;
 
+use Sylius\Bundle\ResourceBundle\Controller\ResourceController;
 use Sylius\Bundle\ResourceBundle\DependencyInjection\Extension\AbstractResourceExtension;
 use Symfony\Component\Config\FileLocator;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
+use Symfony\Component\DependencyInjection\Definition;
 use Symfony\Component\DependencyInjection\Extension\PrependExtensionInterface;
 use Symfony\Component\DependencyInjection\Loader\YamlFileLoader;
+use Symfony\Component\DependencyInjection\Reference;
 
 final class RikaSyliusBrandExtension extends AbstractResourceExtension implements PrependExtensionInterface
 {
@@ -19,11 +22,11 @@ final class RikaSyliusBrandExtension extends AbstractResourceExtension implement
         // Définir le paramètre pour le répertoire d'upload
         $container->setParameter('rika_sylius_brand.upload_dir', '%kernel.project_dir%/public/media/brand');
         
-        // Charger uniquement les services
+        // Charger les services
         $loader = new YamlFileLoader($container, new FileLocator(__DIR__ . '/../Resources/config'));
         $loader->load('services.yaml');
 
-        // Configuration des ressources UNIQUEMENT via registerResources()
+        // Configuration des ressources
         $this->registerResources('rika_sylius_brand', 'doctrine/orm', [
             'brand' => [
                 'classes' => [
@@ -41,6 +44,37 @@ final class RikaSyliusBrandExtension extends AbstractResourceExtension implement
                 ],
             ],
         ], $container);
+
+        // Créer explicitement le contrôleur
+        $this->createController($container);
+    }
+
+    private function createController(ContainerBuilder $container): void
+    {
+        $controllerDefinition = new Definition(ResourceController::class);
+        $controllerDefinition->setArguments([
+            new Reference('rika_sylius_brand.metadata.brand'),
+            new Reference('sylius.resource_controller.request_configuration_factory'),
+            new Reference('sylius.resource_controller.view_handler'),
+            new Reference('rika_sylius_brand.repository.brand'),
+            new Reference('rika_sylius_brand.factory.brand'),
+            new Reference('sylius.resource_controller.new_resource_factory'),
+            new Reference('rika_sylius_brand.manager.brand'),
+            new Reference('sylius.resource_controller.single_resource_provider'),
+            new Reference('sylius.resource_controller.resources_collection_provider'),
+            new Reference('sylius.resource_controller.form_factory'),
+            new Reference('sylius.resource_controller.redirect_handler'),
+            new Reference('sylius.resource_controller.flash_helper'),
+            new Reference('sylius.security.authorization_checker'),
+            new Reference('sylius.resource_controller.event_dispatcher'),
+            new Reference('sylius.resource_controller.state_machine'),
+            new Reference('sylius.resource_controller.resource_update_handler'),
+            new Reference('sylius.resource_controller.resource_delete_handler'),
+        ]);
+        $controllerDefinition->setPublic(true);
+        $controllerDefinition->addTag('controller.service_arguments');
+
+        $container->setDefinition('rika_sylius_brand.controller.brand', $controllerDefinition);
     }
 
     public function prepend(ContainerBuilder $container): void
