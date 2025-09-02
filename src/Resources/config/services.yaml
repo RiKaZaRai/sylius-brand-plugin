@@ -14,10 +14,10 @@ services:
 
     Rika\SyliusBrandPlugin\EventListener\BrandEventListener:
         arguments:
-            $uploadDir: '%kernel.project_dir%/public/uploads/brands'
+            $uploadDir: '%rika_sylius_brand.upload_dir%'
         tags:
-            - { name: kernel.event_listener, event: 'sylius.brand.pre_create', method: uploadLogo }
-            - { name: kernel.event_listener, event: 'sylius.brand.pre_update', method: uploadLogo }
+            - { name: kernel.event_listener, event: 'rika_sylius_brand.brand.pre_create', method: uploadLogo }
+            - { name: kernel.event_listener, event: 'rika_sylius_brand.brand.pre_update', method: uploadLogo }
 
     Rika\SyliusBrandPlugin\EventListener\ProductMappingListener:
         tags:
@@ -27,7 +27,6 @@ services:
         tags:
             - { name: kernel.event_listener, event: sylius.menu.admin.main, method: __invoke }
 
-    # Assurez-vous que les types de formulaire sont bien taggés
     Rika\SyliusBrandPlugin\Form\Type\:
         resource: '../../Form/Type'
         tags: ['form.type']
