@@ -1,0 +1,11 @@
+{% extends '@SyliusAdmin/layout.html.twig' %}
+
+{% block content %}
+    <h1 class="ui header">Ajouter une marque</h1>
+
+    {{ form_start(form, {'attr': {'class': 'ui form'}}) }}
+        {{ form_widget(form) }}
+        <button class="ui primary button" type="submit">Créer</button>
+        <a href="{{ path('admin_brand_index') }}" class="ui button">Retour</a>
+    {{ form_end(form) }}
+{% endblock %}
