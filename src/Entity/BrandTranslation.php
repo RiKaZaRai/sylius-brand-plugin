@@ -4,34 +4,33 @@ declare(strict_types=1);
 
 namespace Rika\SyliusBrandPlugin\Entity;
 
+use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
-use Sylius\Component\Resource\Model\AbstractTranslation;
+use Sylius\Resource\Model\AbstractTranslation;
 
 #[ORM\Entity]
 #[ORM\Table(name: 'rika_brand_translation')]
 class BrandTranslation extends AbstractTranslation implements BrandTranslationInterface
 {
     #[ORM\Id]
-    #[ORM\GeneratedValue(strategy: 'IDENTITY')]
-    #[ORM\Column(type: 'integer')]
+    #[ORM\GeneratedValue]
+    #[ORM\Column(type: Types::INTEGER)]
     private ?int $id = null;
 
-    #[ORM\Column(type: 'string', length: 255)]
+    #[ORM\Column(type: Types::STRING, length: 255, nullable: true)]
     private ?string $name = null;
 
-    #[ORM\Column(type: 'string', length: 255, nullable: true)]
+    #[ORM\Column(type: Types::STRING, length: 255, nullable: true)]
     private ?string $slug = null;
 
-    #[ORM\Column(type: 'text', nullable: true)]
+    #[ORM\Column(type: Types::TEXT, nullable: true)]
     private ?string $description = null;
 
-    #[ORM\Column(type: 'string', length: 255, nullable: true)]
+    #[ORM\Column(type: Types::STRING, length: 255, nullable: true)]
     private ?string $metaTitle = null;
 
-    #[ORM\Column(type: 'text', nullable: true)]
+    #[ORM\Column(type: Types::TEXT, nullable: true)]
     private ?string $metaDescription = null;
-
-    // ... tous vos getters/setters restent identiques ...
 
     public function getId(): ?int
     {
@@ -75,7 +74,7 @@ class BrandTranslation extends AbstractTranslation implements BrandTranslationIn
 
     public function setMetaTitle(?string $metaTitle): void
     {
-        $this->metaDescription = $metaTitle;
+        $this->metaTitle = $metaTitle;
     }
 
     public function getMetaDescription(): ?string
