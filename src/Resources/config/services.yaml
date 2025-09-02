@@ -25,7 +25,7 @@ services:
 
     Rika\SyliusBrandPlugin\Menu\AdminMenuListener:
         tags:
-            - { name: kernel.event_listener, event: sylius.menu.admin.main, method: addBrandMenu }
+            - { name: kernel.event_listener, event: sylius.menu.admin.main, method: __invoke }
 
     # Assurez-vous que les types de formulaire sont bien taggés
     Rika\SyliusBrandPlugin\Form\Type\:
