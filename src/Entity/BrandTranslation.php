@@ -5,9 +5,8 @@ declare(strict_types=1);
 namespace Rika\SyliusBrandPlugin\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
-use Sylius\Component\Resource\Model\AbstractTranslation;
+use Sylius\Resource\Model\AbstractTranslation;
 use Sylius\Component\Resource\Model\SlugAwareInterface;
-use Gedmo\Mapping\Annotation as Gedmo;
 
 #[ORM\Entity]
 #[ORM\Table(name: 'rika_brand_translation')]
@@ -30,8 +29,7 @@ class BrandTranslation extends AbstractTranslation implements BrandTranslationIn
     #[ORM\Column(type: 'text', nullable: true)]
     protected ?string $metaDescription = null;
 
-    #[ORM\Column(type: 'string', length: 255, unique: true)]
-    #[Gedmo\Slug(fields: ['name'])]
+    #[ORM\Column(type: 'string', length: 255, nullable: true)]
     protected ?string $slug = null;
 
     public function getId(): ?int
