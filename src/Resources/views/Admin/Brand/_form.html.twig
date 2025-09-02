@@ -7,10 +7,46 @@
         {{ form_row(form.enabled) }}
         {{ form_row(form.position) }}
     </div>
-    {{ form_row(form.logoFile) }}
+    {% if form.logoPath is defined %}
+        {{ form_row(form.logoPath) }}
+    {% endif %}
 </div>
 
+{% if form.translations is defined %}
 <div class="ui segment">
     <h4 class="ui dividing header">{{ 'sylius.ui.translations'|trans }}</h4>
-    {{ form_row(form.translations) }}
+    
+    {% for locale_form in form.translations %}
+        <div class="ui segment">
+            <div class="ui top attached label">
+                <i class="flag {{ locale_form.vars.name }} icon"></i>
+                {{ locale_form.vars.name|sylius_locale_name }}
+            </div>
+            
+            <div class="ui bottom attached segment">
+                {{ form_row(locale_form.name) }}
+                
+                {% if locale_form.slug is defined %}
+                    {{ form_row(locale_form.slug) }}
+                {% endif %}
+                
+                {% if locale_form.description is defined %}
+                    {{ form_row(locale_form.description) }}
+                {% endif %}
+                
+                {% if locale_form.metaKeywords is defined %}
+                    {{ form_row(locale_form.metaKeywords) }}
+                {% endif %}
+                
+                {% if locale_form.metaDescription is defined %}
+                    {{ form_row(locale_form.metaDescription) }}
+                {% endif %}
+                
+                {{ form_rest(locale_form) }}
+            </div>
+        </div>
+    {% endfor %}
 </div>
+{% endif %}
+
+{{ form_rest(form) }}
