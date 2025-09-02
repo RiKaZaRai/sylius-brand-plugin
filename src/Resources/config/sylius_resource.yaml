@@ -10,4 +10,3 @@ sylius_resource:
                 classes:
                     model: Rika\SyliusBrandPlugin\Entity\BrandTranslation
                     interface: Rika\SyliusBrandPlugin\Entity\BrandTranslationInterface
-                fields: [name, description, slug, metaKeywords, metaDescription]
