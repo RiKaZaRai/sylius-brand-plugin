@@ -12,4 +12,3 @@ rika_sylius_brand_admin_brand:
             index:
                 icon: 'trademark'
     type: sylius.resource
-    prefix: /admin
