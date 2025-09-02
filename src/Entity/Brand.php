@@ -15,7 +15,9 @@ use Sylius\Component\Resource\Model\SlugAwareInterface;
 #[ORM\Table(name: 'rika_brand')]
 class Brand implements BrandInterface, SlugAwareInterface
 {
-    use TranslatableTrait;
+    use TranslatableTrait {
+        __construct as private initializeTranslationsCollection;
+    }
     use TimestampableTrait;
 
     #[ORM\Id]
@@ -38,19 +40,10 @@ class Brand implements BrandInterface, SlugAwareInterface
     #[ORM\OneToMany(mappedBy: 'brand', targetEntity: 'Sylius\Component\Core\Model\Product')]
     protected Collection $products;
 
-    #[ORM\OneToMany(
-        mappedBy: 'translatable',
-        targetEntity: BrandTranslation::class,
-        cascade: ['persist', 'remove'],
-        fetch: 'EXTRA_LAZY',
-        indexBy: 'locale'
-    )]
-    protected Collection $translations;
-
     public function __construct()
     {
+        $this->initializeTranslationsCollection();
         $this->products = new ArrayCollection();
-        $this->translations = new ArrayCollection();
         $this->createdAt = new \DateTime();
     }
 
