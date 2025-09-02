@@ -19,14 +19,9 @@ final class RikaSyliusBrandExtension extends AbstractResourceExtension implement
         // Définir le paramètre pour le répertoire d'upload
         $container->setParameter('rika_sylius_brand.upload_dir', '%kernel.project_dir%/public/media/brand');
         
-        // Charger les fichiers de configuration
+        // Charger uniquement les services
         $loader = new YamlFileLoader($container, new FileLocator(__DIR__ . '/../Resources/config'));
         $loader->load('services.yaml');
-        
-        // Charger les grilles
-        if (file_exists(__DIR__ . '/../Resources/config/grids/admin_brand.yaml')) {
-            $loader->load('grids/admin_brand.yaml');
-        }
 
         // Configuration des ressources UNIQUEMENT via registerResources()
         $this->registerResources('rika_sylius_brand', 'doctrine/orm', [
@@ -60,6 +55,84 @@ final class RikaSyliusBrandExtension extends AbstractResourceExtension implement
                             'dir'    => __DIR__ . '/../Resources/config/doctrine',
                             'prefix' => 'Rika\SyliusBrandPlugin\Entity',
                             'alias'  => 'RikaSyliusBrandPlugin',
+                        ],
+                    ],
+                ],
+            ]);
+        }
+
+        // Configuration des grilles
+        if ($container->hasExtension('sylius_grid')) {
+            $container->prependExtensionConfig('sylius_grid', [
+                'grids' => [
+                    'rika_sylius_brand_admin_brand' => [
+                        'driver' => [
+                            'name' => 'doctrine/orm',
+                            'options' => [
+                                'class' => 'Rika\SyliusBrandPlugin\Entity\Brand',
+                            ],
+                        ],
+                        'sorting' => [
+                            'name' => 'asc',
+                        ],
+                        'fields' => [
+                            'code' => [
+                                'type' => 'string',
+                                'label' => 'sylius.ui.code',
+                                'sortable' => true,
+                            ],
+                            'name' => [
+                                'type' => 'string',
+                                'label' => 'sylius.ui.name',
+                                'sortable' => true,
+                            ],
+                            'logo' => [
+                                'type' => 'twig',
+                                'label' => 'rika_sylius_brand.ui.logo',
+                                'options' => [
+                                    'template' => '@RikaSyliusBrandPlugin/Admin/Brand/Grid/Field/logo.html.twig',
+                                ],
+                            ],
+                            'enabled' => [
+                                'type' => 'twig',
+                                'label' => 'sylius.ui.enabled',
+                                'options' => [
+                                    'template' => '@SyliusUi/Grid/Field/enabled.html.twig',
+                                ],
+                            ],
+                            'position' => [
+                                'type' => 'string',
+                                'label' => 'sylius.ui.position',
+                                'sortable' => true,
+                            ],
+                        ],
+                        'filters' => [
+                            'search' => [
+                                'type' => 'string',
+                                'label' => 'sylius.ui.search',
+                                'options' => [
+                                    'fields' => ['code', 'translation.name'],
+                                ],
+                            ],
+                            'enabled' => [
+                                'type' => 'boolean',
+                                'label' => 'sylius.ui.enabled',
+                            ],
+                        ],
+                        'actions' => [
+                            'main' => [
+                                'create' => [
+                                    'type' => 'create',
+                                ],
+                            ],
+                            'item' => [
+                                'update' => [
+                                    'type' => 'update',
+                                ],
+                                'delete' => [
+                                    'type' => 'delete',
+                                ],
+                            ],
                         ],
                     ],
                 ],
