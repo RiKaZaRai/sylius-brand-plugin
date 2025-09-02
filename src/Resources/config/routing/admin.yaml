@@ -2,8 +2,6 @@ rika_sylius_brand_admin_brand:
     resource: |
         alias: rika_sylius_brand.brand
         section: admin
-        templates: "@SyliusAdmin\\shared\\crud"
-        except: ['show']
         redirect: update
         grid: rika_sylius_brand_admin_brand
         vars:
