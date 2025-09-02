@@ -10,15 +10,25 @@ use Sylius\Component\Resource\Model\TranslationInterface;
 
 interface BrandTranslationInterface extends ResourceInterface, TranslationInterface, SlugAwareInterface
 {
-    public function getName(): ?string;
+    public function id(): ?int;
+
+    public function name(): ?string;
+
     public function setName(?string $name): void;
 
-    public function getDescription(): ?string;
+    public function slug(): ?string;
+
+    public function setSlug(?string $slug): void;
+
+    public function description(): ?string;
+
     public function setDescription(?string $description): void;
 
-    public function getMetaKeywords(): ?string;
+    public function metaKeywords(): ?string;
+
     public function setMetaKeywords(?string $metaKeywords): void;
 
-    public function getMetaDescription(): ?string;
+    public function metaDescription(): ?string;
+
     public function setMetaDescription(?string $metaDescription): void;
 }

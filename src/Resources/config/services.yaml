@@ -12,11 +12,18 @@ services:
         resource: '../../Controller'
         tags: ['controller.service_arguments']
 
-    # Factories pour les ressources Sylius
-    rika_sylius_brand.factory.brand:
+    # Factory avec initialisation de la locale
+    rika_sylius_brand.factory.brand.inner:
         class: Sylius\Resource\Factory\Factory
         arguments:
             - 'Rika\SyliusBrandPlugin\Entity\Brand'
+
+    rika_sylius_brand.factory.brand:
+        class: Rika\SyliusBrandPlugin\Factory\BrandFactory
+        decorates: 'rika_sylius_brand.factory.brand.inner'
+        arguments:
+            - '@.inner'
+            - '@sylius.context.locale'
 
     rika_sylius_brand.factory.brand_translation:
         class: Sylius\Resource\Factory\Factory
@@ -62,11 +69,3 @@ services:
     Rika\SyliusBrandPlugin\Form\Extension\ProductTypeExtension:
         tags:
             - { name: 'form.type_extension', extended_type: 'Sylius\Bundle\ProductBundle\Form\Type\ProductType' }
-
-    # Repository manager si nécessaire
-    rika_sylius_brand.manager.brand:
-        alias: 'doctrine.orm.entity_manager'
-
-    # Configuration du translatable pour assurer le bon fonctionnement
-    rika_sylius_brand.context.locale:
-        alias: 'sylius.context.locale'
