@@ -12,38 +12,37 @@
     {% endif %}
 </div>
 
-{% if form.translations is defined %}
+{% if form.translations is defined and form.translations|length > 0 %}
 <div class="ui segment">
     <h4 class="ui dividing header">{{ 'sylius.ui.translations'|trans }}</h4>
     
+    <div class="ui top attached tabular menu">
+        {% for locale_form in form.translations %}
+            <div class="item {% if loop.first %}active{% endif %}" data-tab="{{ locale_form.vars.name }}">
+                {{ locale_form.vars.name|upper }}
+            </div>
+        {% endfor %}
+    </div>
+    
     {% for locale_form in form.translations %}
-        <div class="ui segment">
-            <div class="ui top attached label">
-                <i class="flag {{ locale_form.vars.name }} icon"></i>
-                {{ locale_form.vars.name|sylius_locale_name }}
-            </div>
+        <div class="ui bottom attached tab segment {% if loop.first %}active{% endif %}" data-tab="{{ locale_form.vars.name }}">
+            {{ form_row(locale_form.name) }}
             
-            <div class="ui bottom attached segment">
-                {{ form_row(locale_form.name) }}
-                
-                {% if locale_form.slug is defined %}
-                    {{ form_row(locale_form.slug) }}
-                {% endif %}
-                
-                {% if locale_form.description is defined %}
-                    {{ form_row(locale_form.description) }}
-                {% endif %}
-                
-                {% if locale_form.metaKeywords is defined %}
-                    {{ form_row(locale_form.metaKeywords) }}
-                {% endif %}
-                
-                {% if locale_form.metaDescription is defined %}
-                    {{ form_row(locale_form.metaDescription) }}
-                {% endif %}
-                
-                {{ form_rest(locale_form) }}
-            </div>
+            {% if locale_form.slug is defined %}
+                {{ form_row(locale_form.slug) }}
+            {% endif %}
+            
+            {% if locale_form.description is defined %}
+                {{ form_row(locale_form.description) }}
+            {% endif %}
+            
+            {% if locale_form.metaKeywords is defined %}
+                {{ form_row(locale_form.metaKeywords) }}
+            {% endif %}
+            
+            {% if locale_form.metaDescription is defined %}
+                {{ form_row(locale_form.metaDescription) }}
+            {% endif %}
         </div>
     {% endfor %}
 </div>

@@ -3,7 +3,7 @@ rika_sylius_brand_admin_brand:
         alias: rika_sylius_brand.brand
         section: admin
         templates: "@SyliusAdmin\\shared\\crud"
-        except: ['show', 'create', 'update']
+        except: ['show']
         redirect: update
         grid: rika_sylius_brand_admin_brand
         vars:
@@ -13,23 +13,3 @@ rika_sylius_brand_admin_brand:
                 icon: 'trademark'
     type: sylius.resource
     prefix: /admin
-
-# Route spécifique pour la création avec template personnalisé
-rika_sylius_brand_admin_brand_create:
-    path: /admin/brands/new
-    methods: [GET, POST]
-    defaults:
-        _controller: rika_sylius_brand.controller.brand::createAction
-        _sylius:
-            template: "@RikaSyliusBrandPlugin/Admin/Brand/create.html.twig"
-            redirect: rika_sylius_brand_admin_brand_index
-
-# Route spécifique pour l'édition
-rika_sylius_brand_admin_brand_update:
-    path: /admin/brands/{id}/edit
-    methods: [GET, PUT, POST]
-    defaults:
-        _controller: rika_sylius_brand.controller.brand::updateAction
-        _sylius:
-            template: "@RikaSyliusBrandPlugin/Admin/Brand/update.html.twig"
-            redirect: rika_sylius_brand_admin_brand_index
