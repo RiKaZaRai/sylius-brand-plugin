@@ -5,64 +5,41 @@ declare(strict_types=1);
 namespace Rika\SyliusBrandPlugin\EventListener;
 
 use Rika\SyliusBrandPlugin\Entity\BrandInterface;
-use Symfony\Component\EventDispatcher\EventDispatcherInterface;
-use Symfony\Component\EventDispatcher\GenericEvent;
+use Symfony\Component\HttpFoundation\File\Exception\FileException;
+use Symfony\Component\HttpFoundation\RequestStack;
+use Symfony\Component\EventDispatcher\EventSubscriberInterface;
+use Sylius\Bundle\ResourceBundle\Event\ResourceControllerEvent;
 
-class BrandEventListener
+final class BrandEventListener implements EventSubscriberInterface
 {
-    public const BRAND_PRE_CREATE = 'rika_sylius_brand.brand.pre_create';
-    public const BRAND_POST_CREATE = 'rika_sylius_brand.brand.post_create';
-    public const BRAND_PRE_UPDATE = 'rika_sylius_brand.brand.pre_update';
-    public const BRAND_POST_UPDATE = 'rika_sylius_brand.brand.post_update';
-    public const BRAND_PRE_DELETE = 'rika_sylius_brand.brand.pre_delete';
-    public const BRAND_POST_DELETE = 'rika_sylius_brand.brand.post_delete';
-
-    public function __construct(
-        private EventDispatcherInterface $eventDispatcher
-    ) {
+    public function __construct(private RequestStack $requestStack, private string $uploadDir)
+    {
     }
 
-    public function onBrandPreCreate(GenericEvent $event): void
+    public static function getSubscribedEvents(): array
+    {
+        return [
+            'sylius.brand.pre_create' => 'uploadLogo',
+            'sylius.brand.pre_update' => 'uploadLogo',
+        ];
+    }
+
+    public function uploadLogo(ResourceControllerEvent $event): void
     {
         /** @var BrandInterface $brand */
         $brand = $event->getSubject();
-        
-        $this->eventDispatcher->dispatch(
-            new GenericEvent($brand, ['action' => 'pre_create']),
-            'rika_sylius_brand.hook.brand_pre_create'
-        );
-    }
+        $request = $this->requestStack->getCurrentRequest();
 
-    public function onBrandPostCreate(GenericEvent $event): void
-    {
-        /** @var BrandInterface $brand */
-        $brand = $event->getSubject();
-        
-        $this->eventDispatcher->dispatch(
-            new GenericEvent($brand, ['action' => 'post_create']),
-            'rika_sylius_brand.hook.brand_post_create'
-        );
-    }
+        $file = $request->files->get('rika_sylius_brand_plugin')['logoPath'] ?? null;
 
-    public function onBrandPreUpdate(GenericEvent $event): void
-    {
-        /** @var BrandInterface $brand */
-        $brand = $event->getSubject();
-        
-        $this->eventDispatcher->dispatch(
-            new GenericEvent($brand, ['action' => 'pre_update']),
-            'rika_sylius_brand.hook.brand_pre_update'
-        );
-    }
-
-    public function onBrandPostUpdate(GenericEvent $event): void
-    {
-        /** @var BrandInterface $brand */
-        $brand = $event->getSubject();
-        
-        $this->eventDispatcher->dispatch(
-            new GenericEvent($brand, ['action' => 'post_update']),
-            'rika_sylius_brand.hook.brand_post_update'
-        );
+        if ($file) {
+            $filename = uniqid().'.'.$file->guessExtension();
+            try {
+                $file->move($this->uploadDir, $filename);
+                $brand->setLogoPath('/uploads/brands/'.$filename);
+            } catch (FileException $e) {
+                // Optionnel : loguer l'erreur
+            }
+        }
     }
 }

@@ -15,9 +15,7 @@ sylius_grid:
                 logo:
                     type: twig
                     label: rika_sylius_brand.ui.logo
-                    path: .
-                    options:
-                        template: "@RikaSyliusBrandPlugin/Admin/Brand/Grid/Field/logo.html.twig"
+                    template: "@RikaSyliusBrandPlugin/Admin/Brand/Grid/Field/logo.html.twig"
                 code:
                     type: string
                     label: sylius.ui.code
@@ -29,9 +27,7 @@ sylius_grid:
                 enabled:
                     type: twig
                     label: sylius.ui.enabled
-                    sortable: ~
-                    options:
-                        template: "@SyliusUi/Grid/Field/enabled.html.twig"
+                    template: "@SyliusUi/Grid/Field/enabled.html.twig"
                 position:
                     type: string
                     label: rika_sylius_brand.ui.position

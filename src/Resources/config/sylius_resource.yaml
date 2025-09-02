@@ -1,4 +1,3 @@
-# src/Resources/config/sylius_resource.yaml
 sylius_resource:
     resources:
         rika_sylius_brand.brand:
@@ -8,8 +7,7 @@ sylius_resource:
                 interface: Rika\SyliusBrandPlugin\Entity\BrandInterface
                 repository: Rika\SyliusBrandPlugin\Repository\BrandRepository
                 form: Rika\SyliusBrandPlugin\Form\Type\BrandType
-            translation:
-                classes:
+                translation:
                     model: Rika\SyliusBrandPlugin\Entity\BrandTranslation
                     interface: Rika\SyliusBrandPlugin\Entity\BrandTranslationInterface
                     form: Rika\SyliusBrandPlugin\Form\Type\BrandTranslationType

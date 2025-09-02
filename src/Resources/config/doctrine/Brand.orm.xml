@@ -4,7 +4,7 @@
                   xsi:schemaLocation="http://doctrine-project.org/schemas/orm/doctrine-mapping
                   http://doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
 
-    <entity name="Rika\SyliusBrandPlugin\Entity\Brand" table="sylius_brand_product">
+    <entity name="Rika\SyliusBrandPlugin\Entity\Brand" table="rika_brand">
         <id name="id" type="integer">
             <generator strategy="AUTO"/>
         </id>
@@ -17,15 +17,11 @@
         <field name="updatedAt" type="datetime" nullable="true"/>
 
         <!-- Translations -->
-        <one-to-many field="translations" target-entity="Rika\SyliusBrandPlugin\Entity\BrandTranslation" 
-                     mapped-by="translatable" cascade="ALL" orphan-removal="true">
-            <cascade>
-                <cascade-all/>
-            </cascade>
-        </one-to-many>
+        <one-to-many field="translations" target-entity="Rika\SyliusBrandPlugin\Entity\BrandTranslation"
+                     mapped-by="translatable" cascade="ALL" orphan-removal="true"/>
 
         <!-- Products relation -->
-        <one-to-many field="products" target-entity="Sylius\Component\Core\Model\ProductInterface" mapped-by="brand">
+        <one-to-many field="products" target-entity="Sylius\Component\Core\Model\Product" mapped-by="brand">
             <order-by>
                 <order-by-field name="position" direction="ASC"/>
             </order-by>
