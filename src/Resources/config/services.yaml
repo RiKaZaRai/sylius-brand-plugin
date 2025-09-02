@@ -19,9 +19,9 @@ services:
 
     rika_sylius_brand.factory.brand:
         class: Rika\SyliusBrandPlugin\Factory\BrandFactory
-        decorates: 'rika_sylius_brand.factory.brand.inner'
+        decorates: rika_sylius_brand.factory.brand.inner
         arguments:
-            - '@.inner'
+            - '@rika_sylius_brand.factory.brand.inner'
             - '@sylius.context.locale'
 
     rika_sylius_brand.factory.brand_translation:
@@ -50,18 +50,18 @@ services:
         arguments:
             $dataClass: 'Rika\SyliusBrandPlugin\Entity\Brand'
             $validationGroups: ['sylius']
-        tags: 
+        tags:
             - { name: 'form.type' }
 
     Rika\SyliusBrandPlugin\Form\Type\BrandTranslationType:
         arguments:
             $dataClass: 'Rika\SyliusBrandPlugin\Entity\BrandTranslation'
             $validationGroups: ['sylius']
-        tags: 
+        tags:
             - { name: 'form.type' }
 
     Rika\SyliusBrandPlugin\Form\Type\BrandChoiceType:
-        tags: 
+        tags:
             - { name: 'form.type' }
 
     # Form extensions
