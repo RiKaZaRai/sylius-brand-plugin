@@ -59,7 +59,7 @@ final class RikaSyliusBrandExtension extends AbstractResourceExtension implement
                             ],
                         ],
                         'sorting' => [
-                            'name' => 'asc',
+                            'translation.name' => 'asc', // Corrigé ici
                         ],
                         'fields' => [
                             'code' => [
@@ -70,7 +70,8 @@ final class RikaSyliusBrandExtension extends AbstractResourceExtension implement
                             'name' => [
                                 'type' => 'string',
                                 'label' => 'sylius.ui.name',
-                                'sortable' => true,
+                                'path' => 'translation.name', // Ajouté le path pour la traduction
+                                'sortable' => 'translation.name', // Corrigé le tri
                             ],
                             'logo' => [
                                 'type' => 'twig',
