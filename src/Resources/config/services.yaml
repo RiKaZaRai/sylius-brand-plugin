@@ -9,14 +9,14 @@ services:
     # Plugin services
     # ------------------------------------------------------
     Rika\SyliusBrandPlugin\:
-        resource: '../*'
-        exclude: '../{DependencyInjection,Entity,Resources,Tests,Controller}'
+        resource: '../../*'
+        exclude: '../../{DependencyInjection,Entity,Resources,Tests}'
 
     # ------------------------------------------------------
     # Controllers
     # ------------------------------------------------------
     Rika\SyliusBrandPlugin\Controller\:
-        resource: '../Controller'
+        resource: '../../Controller'
         tags: ['controller.service_arguments']
 
     # ------------------------------------------------------
@@ -48,9 +48,9 @@ services:
     # Forms
     # ------------------------------------------------------
     Rika\SyliusBrandPlugin\Form\Type\:
-        resource: '../Form/Type'
+        resource: '../../Form/Type'
         tags: ['form.type']
 
     Rika\SyliusBrandPlugin\Form\Extension\:
-        resource: '../Form/Extension'
+        resource: '../../Form/Extension'
         tags: ['form.type_extension']
