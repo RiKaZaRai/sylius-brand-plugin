@@ -1,4 +1,4 @@
-# src/Resources/config/services.yaml - Version simplifiée
+# src/Resources/config/services.yaml
 services:
     _defaults:
         autowire: true
@@ -7,7 +7,7 @@ services:
 
     Rika\SyliusBrandPlugin\:
         resource: '../../*'
-        exclude: '../../{Entity,Resources}'
+        exclude: '../../{Entity,Resources,Repository}'
 
     # Form Types avec configuration explicite
     Rika\SyliusBrandPlugin\Form\Type\BrandType:

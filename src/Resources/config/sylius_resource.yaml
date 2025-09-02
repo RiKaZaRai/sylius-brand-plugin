@@ -1,3 +1,4 @@
+# src/Resources/config/sylius_resource.yaml
 sylius_resource:
     resources:
         rika_sylius_brand.brand:

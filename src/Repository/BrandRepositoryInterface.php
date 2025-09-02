@@ -1,4 +1,5 @@
 <?php
+// src/Repository/BrandRepositoryInterface.php
 
 declare(strict_types=1);
 
