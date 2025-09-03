@@ -44,7 +44,27 @@ final class RikaSyliusBrandExtension extends AbstractResourceExtension implement
                 ],
             ]);
         }
-        // SUPPRIMÉ: Configuration de grille (sera gérée dans RikaSyliusBrandPlugin.php)
+
+        // Configuration des ressources Sylius
+        $container->prependExtensionConfig('sylius_resource', [
+            'resources' => [
+                'rika_sylius_brand.brand' => [
+                    'driver' => 'doctrine/orm',
+                    'classes' => [
+                        'model' => 'Rika\SyliusBrandPlugin\Entity\Brand',
+                        'repository' => 'Rika\SyliusBrandPlugin\Repository\BrandRepository',
+                        'factory' => 'Rika\SyliusBrandPlugin\Factory\BrandFactory',
+                        'form' => 'Rika\SyliusBrandPlugin\Form\Type\BrandType',
+                    ],
+                    'translation' => [
+                        'classes' => [
+                            'model' => 'Rika\SyliusBrandPlugin\Entity\BrandTranslation',
+                            'form' => 'Rika\SyliusBrandPlugin\Form\Type\BrandTranslationType',
+                        ],
+                    ],
+                ],
+            ],
+        ]);
     }
 
     private function getCurrentConfiguration(ContainerBuilder $container): array
