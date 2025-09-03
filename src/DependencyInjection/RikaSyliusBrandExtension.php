@@ -14,12 +14,12 @@ final class RikaSyliusBrandExtension extends AbstractResourceExtension implement
 {
     public function load(array $configs, ContainerBuilder $container): void
     {
-        $config = $this->processConfiguration($this->getConfiguration([], $container), $configs);
+        $config = $this->getCurrentConfiguration($container);
 
         // Définir le paramètre pour le répertoire d'upload
         $container->setParameter('rika_sylius_brand.upload_dir', '%kernel.project_dir%/public/media/brand');
 
-        // Enregistrer les ressources
+        // Enregistrer les ressources avec la clé correcte
         $this->registerResources('rika_sylius_brand', 'doctrine/orm', $config['resources'], $container);
 
         // Charger les services
@@ -29,7 +29,7 @@ final class RikaSyliusBrandExtension extends AbstractResourceExtension implement
 
     public function prepend(ContainerBuilder $container): void
     {
-        // ✅ Configuration des routes
+        // Configuration des routes
         if ($container->hasExtension('framework')) {
             $container->prependExtensionConfig('framework', [
                 'router' => [
@@ -47,7 +47,7 @@ final class RikaSyliusBrandExtension extends AbstractResourceExtension implement
                             'type'   => 'xml',
                             'dir'    => __DIR__ . '/../Resources/config/doctrine',
                             'prefix' => 'Rika\SyliusBrandPlugin\Entity',
-                            'alias'  => 'RikaSyliusBrandPlugin',
+                            'is_bundle' => false,
                         ],
                     ],
                 ],
@@ -196,4 +196,8 @@ final class RikaSyliusBrandExtension extends AbstractResourceExtension implement
 
         return $this->processConfiguration($configuration, array_merge([$defaultConfig], $configs));
     }
+    public function getAlias(): string
+{
+    return 'rika_sylius_brand';
+}
 }

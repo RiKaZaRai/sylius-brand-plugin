@@ -34,7 +34,7 @@ final class Configuration implements ConfigurationInterface
                 ->arrayNode('resources')
                     ->addDefaultsIfNotSet()
                     ->children()
-                        ->arrayNode('brand')
+                        ->arrayNode('brand') // ⚠️ Changé ici : brand au lieu de rika_sylius_brand.brand
                             ->addDefaultsIfNotSet()
                             ->children()
                                 ->variableNode('options')->end()
