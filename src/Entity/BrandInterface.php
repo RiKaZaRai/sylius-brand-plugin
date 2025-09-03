@@ -7,9 +7,13 @@ namespace Rika\SyliusBrandPlugin\Entity;
 use Sylius\Component\Product\Model\ProductInterface;
 use Sylius\Resource\Model\ToggleableInterface;
 use Sylius\Resource\Model\TimestampableInterface;
+use Sylius\Resource\Model\TranslatableInterface;
 use Sylius\Resource\Model\TranslationInterface;
 
-interface BrandInterface extends ToggleableInterface, TimestampableInterface
+interface BrandInterface extends 
+    ToggleableInterface, 
+    TimestampableInterface, 
+    TranslatableInterface
 {
     public function getId(): ?int;
 

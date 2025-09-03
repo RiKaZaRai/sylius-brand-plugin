@@ -12,9 +12,10 @@ use Sylius\Resource\Model\SlugAwareInterface;
 use Sylius\Resource\Model\TimestampableTrait;
 use Sylius\Resource\Model\ToggleableTrait;
 use Sylius\Resource\Model\TranslatableTrait;
+use Sylius\Resource\Model\TranslatableInterface;
 use Sylius\Resource\Model\TranslationInterface;
 
-class Brand implements BrandInterface, ResourceInterface, SlugAwareInterface
+class Brand implements BrandInterface, ResourceInterface, SlugAwareInterface, TranslatableInterface
 {
     use TimestampableTrait;
     use ToggleableTrait;
