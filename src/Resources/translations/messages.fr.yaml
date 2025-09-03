@@ -6,7 +6,7 @@ rika_sylius_brand:
         new_brand: Nouvelle marque
         edit_brand: Modifier la marque
         logo: Logo
-        no_logo: Pas de logo
+        no_logo: Aucun logo
         position: Position
         products: Produits
     menu:
