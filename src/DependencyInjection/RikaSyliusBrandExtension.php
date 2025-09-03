@@ -16,19 +16,30 @@ final class RikaSyliusBrandExtension extends AbstractResourceExtension implement
     {
         $config = $this->getCurrentConfiguration($container);
 
-        // Paramètre pour le répertoire d’upload
+        // Paramètre pour le répertoire d'upload
         $container->setParameter('rika_sylius_brand.upload_dir', '%kernel.project_dir%/public/media/brand');
 
         // Déclaration des ressources Sylius
         $this->registerResources('rika_sylius_brand', 'doctrine/orm', $config['resources'], $container);
 
-        // ⚠️ Resources est à la racine du plugin
+        // Chargement des services
         $loader = new YamlFileLoader($container, new FileLocator(__DIR__ . '/../../Resources/config'));
         $loader->load('services.yaml');
     }
 
     public function prepend(ContainerBuilder $container): void
     {
+        // Configuration des traductions pour autonomie du plugin
+        if ($container->hasExtension('framework')) {
+            $container->prependExtensionConfig('framework', [
+                'translator' => [
+                    'paths' => [
+                        __DIR__ . '/../../translations', // Chemin vers translations/ à la racine
+                    ],
+                ],
+            ]);
+        }
+
         // Mapping Doctrine
         if ($container->hasExtension('doctrine')) {
             $container->prependExtensionConfig('doctrine', [
@@ -36,7 +47,6 @@ final class RikaSyliusBrandExtension extends AbstractResourceExtension implement
                     'mappings' => [
                         'RikaSyliusBrandPlugin' => [
                             'type' => 'xml',
-                            // ⚠️ Resources est à la racine du plugin
                             'dir' => __DIR__ . '/../../Resources/config/doctrine',
                             'prefix' => 'Rika\SyliusBrandPlugin\Entity',
                             'is_bundle' => false,
