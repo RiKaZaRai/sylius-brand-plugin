@@ -4,7 +4,7 @@ rika_sylius_brand_admin_brand:
         section: admin
         templates: "@SyliusAdmin/shared/crud"
         redirect: update
-        grid: admin_brand
+        grid: rika_sylius_brand_admin_brand
         permission: true
         vars:
             all:

@@ -73,7 +73,7 @@ final class RikaSyliusBrandExtension extends AbstractResourceExtension implement
         if ($container->hasExtension('sylius_grid')) {
             $container->prependExtensionConfig('sylius_grid', [
                 'grids' => [
-                    'admin_brand' => [
+                    'rika_sylius_brand_admin_brand' => [
                         'driver' => [
                             'name' => 'doctrine/orm',
                             'options' => [
