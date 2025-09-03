@@ -11,17 +11,14 @@ services:
         resource: '../../Controller'
         tags: ['controller.service_arguments']
 
-    # Factory avec initialisation de la locale
-    rika_sylius_brand.factory.brand.inner:
-        class: Sylius\Resource\Factory\Factory
-        arguments:
-            - 'Rika\SyliusBrandPlugin\Entity\Brand'
-
+    # Factory - SOLUTION 1: Sans décoration
     rika_sylius_brand.factory.brand:
         class: Rika\SyliusBrandPlugin\Factory\BrandFactory
-        decorates: rika_sylius_brand.factory.brand.inner
         arguments:
-            - '@rika_sylius_brand.factory.brand.inner'
+            - !service
+                class: Sylius\Resource\Factory\Factory
+                arguments:
+                    - 'Rika\SyliusBrandPlugin\Entity\Brand'
             - '@sylius.context.locale'
 
     rika_sylius_brand.factory.brand_translation:
