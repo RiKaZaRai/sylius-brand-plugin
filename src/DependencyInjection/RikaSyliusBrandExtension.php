@@ -15,21 +15,26 @@ final class RikaSyliusBrandExtension extends AbstractResourceExtension implement
     public function load(array $configs, ContainerBuilder $container): void
     {
         $config = $this->processConfiguration($this->getConfiguration([], $container), $configs);
-        
+
         // Définir le paramètre pour le répertoire d'upload
         $container->setParameter('rika_sylius_brand.upload_dir', '%kernel.project_dir%/public/media/brand');
-        
+
         // Enregistrer les ressources
         $this->registerResources('rika_sylius_brand', 'doctrine/orm', $config['resources'], $container);
-        
+
         // Charger les services
         $loader = new YamlFileLoader($container, new FileLocator(__DIR__ . '/../Resources/config'));
         $loader->load('services.yaml');
+        
+        // Charger les grids seulement s'ils existent
+        if (file_exists(__DIR__ . '/../Resources/config/grids.yaml')) {
+            $loader->load('grids.yaml');
+        }
     }
 
     public function prepend(ContainerBuilder $container): void
     {
-        // Configuration Doctrine uniquement
+        // Configuration Doctrine
         if ($container->hasExtension('doctrine')) {
             $container->prependExtensionConfig('doctrine', [
                 'orm' => [
@@ -46,54 +51,33 @@ final class RikaSyliusBrandExtension extends AbstractResourceExtension implement
         }
 
         // Configuration des ressources Sylius
-        $container->prependExtensionConfig('sylius_resource', [
-            'resources' => [
-                'rika_sylius_brand.brand' => [
-                    'driver' => 'doctrine/orm',
-                    'classes' => [
-                        'model' => 'Rika\SyliusBrandPlugin\Entity\Brand',
-                        'repository' => 'Rika\SyliusBrandPlugin\Repository\BrandRepository',
-                        'factory' => 'Rika\SyliusBrandPlugin\Factory\BrandFactory',
-                        'form' => 'Rika\SyliusBrandPlugin\Form\Type\BrandType',
-                    ],
-                    'translation' => [
+        if ($container->hasExtension('sylius_resource')) {
+            $container->prependExtensionConfig('sylius_resource', [
+                'resources' => [
+                    'rika_sylius_brand.brand' => [
+                        'driver' => 'doctrine/orm',
                         'classes' => [
-                            'model' => 'Rika\SyliusBrandPlugin\Entity\BrandTranslation',
-                            'form' => 'Rika\SyliusBrandPlugin\Form\Type\BrandTranslationType',
+                            'model' => 'Rika\SyliusBrandPlugin\Entity\Brand',
+                            'interface' => 'Rika\SyliusBrandPlugin\Entity\BrandInterface',
+                            'repository' => 'Rika\SyliusBrandPlugin\Repository\BrandRepository',
+                            'factory' => 'Rika\SyliusBrandPlugin\Factory\BrandFactory',
+                            'form' => 'Rika\SyliusBrandPlugin\Form\Type\BrandType',
+                        ],
+                        'translation' => [
+                            'classes' => [
+                                'model' => 'Rika\SyliusBrandPlugin\Entity\BrandTranslation',
+                                'interface' => 'Rika\SyliusBrandPlugin\Entity\BrandTranslationInterface',
+                                'form' => 'Rika\SyliusBrandPlugin\Form\Type\BrandTranslationType',
+                            ],
                         ],
                     ],
                 ],
-            ],
-        ]);
+            ]);
+        }
     }
 
-    private function getCurrentConfiguration(ContainerBuilder $container): array
+    public function getConfiguration(array $config, ContainerBuilder $container): Configuration
     {
-        $configuration = $this->getConfiguration([], $container);
-        $configs = $container->getExtensionConfig($this->getAlias());
-        
-        // Configuration par défaut des ressources
-        $defaultConfig = [
-            'resources' => [
-                'brand' => [
-                    'classes' => [
-                        'model' => 'Rika\SyliusBrandPlugin\Entity\Brand',
-                        'interface' => 'Rika\SyliusBrandPlugin\Entity\BrandInterface',
-                        'repository' => 'Rika\SyliusBrandPlugin\Repository\BrandRepository',
-                        'form' => 'Rika\SyliusBrandPlugin\Form\Type\BrandType',
-                        'factory' => 'Rika\SyliusBrandPlugin\Factory\BrandFactory',
-                    ],
-                    'translation' => [
-                        'classes' => [
-                            'model' => 'Rika\SyliusBrandPlugin\Entity\BrandTranslation',
-                            'interface' => 'Rika\SyliusBrandPlugin\Entity\BrandTranslationInterface',
-                            'form' => 'Rika\SyliusBrandPlugin\Form\Type\BrandTranslationType',
-                        ],
-                    ],
-                ],
-            ],
-        ];
-        
-        return $this->processConfiguration($configuration, array_merge([$defaultConfig], $configs));
+        return new Configuration();
     }
 }

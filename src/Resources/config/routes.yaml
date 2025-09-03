@@ -1,0 +1,11 @@
+# Routes admin
+rika_sylius_brand_admin:
+    resource: 'routing/admin.yaml'
+    prefix: /admin
+
+# Routes shop (déjà existantes)
+rika_sylius_brand_shop:
+    resource: 'routing/shop.yaml'
+    prefix: /{_locale}
+    requirements:
+        _locale: ^[A-Za-z]{2,4}(_([A-Za-z]{4}|[0-9]{3}))?(_([A-Za-z]{2}|[0-9]{3}))?$

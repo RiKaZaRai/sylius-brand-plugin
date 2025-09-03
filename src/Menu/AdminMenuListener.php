@@ -19,9 +19,9 @@ final class AdminMenuListener
 
         $catalogMenu
             ->addChild('brands', [
-                'route' => 'rika_sylius_brand_admin_brand_index', // Route qui sera générée par le fichier de routes
+                'route' => 'rika_sylius_brand_admin_brand_index',
             ])
-            ->setLabel('Marques')
+            ->setLabel('rika_sylius_brand.menu.admin.main.catalog.brands')
             ->setLabelAttribute('icon', 'star')
         ;
     }
