@@ -13,4 +13,3 @@ rika_sylius_brand_admin_brand:
             index:
                 icon: 'tag icon'
     type: sylius.resource
-    prefix: /admin
