@@ -9,8 +9,8 @@
             {% if brand.logoPath %}
                 <img src="{{ asset(brand.logoPath) }}" alt="{{ brand.name }}">
             {% endif %}
-            <h2><a href="{{ path('shop_brand_show', {slug: brand.translations|first.slug}) }}">
-                {{ brand.translations|first.name }}
+            <h2><a href="{{ path('rika_sylius_brand_shop_brand_show', {slug: brand.slug}) }}">
+                {{ brand.name }}
             </a></h2>
         </div>
     {% else %}

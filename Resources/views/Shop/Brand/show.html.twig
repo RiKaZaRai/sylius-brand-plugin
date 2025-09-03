@@ -1,13 +1,13 @@
 {% extends '@SyliusShop/layout.html.twig' %}
 
 {% block content %}
-<h1>{{ brand.translations|first.name }}</h1>
+<h1>{{ brand.name }}</h1>
 
 {% if brand.logoPath %}
-    <img src="{{ asset(brand.logoPath) }}" alt="{{ brand.translations|first.name }}">
+    <img src="{{ asset(brand.logoPath) }}" alt="{{ brand.name }}">
 {% endif %}
 
-<p>{{ brand.translations|first.description }}</p>
+<p>{{ brand.description }}</p>
 
 <h2>Produits de cette marque</h2>
 <ul>
