@@ -43,8 +43,6 @@ services:
         arguments:
             $dataClass: 'Rika\SyliusBrandPlugin\Entity\Brand'
             $validationGroups: ['sylius']
-            $locales: '%sylius.locales%'
-            $defaultLocale: '%locale%'
         tags:
             - { name: 'form.type' }
 
