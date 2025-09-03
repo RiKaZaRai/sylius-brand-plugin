@@ -5,21 +5,17 @@ services:
 
     Rika\SyliusBrandPlugin\:
         resource: '../../*'
-        exclude: '../../{DependencyInjection,Entity,Tests,Form}'
+        exclude: '../../{DependencyInjection,Entity,Tests,Form,Factory}'
 
     Rika\SyliusBrandPlugin\Controller\:
         resource: '../../Controller'
         tags: ['controller.service_arguments']
 
-    # Factory - SOLUTION 1: Sans décoration
+    # Utiliser la factory par défaut de Sylius
     rika_sylius_brand.factory.brand:
-        class: Rika\SyliusBrandPlugin\Factory\BrandFactory
+        class: Sylius\Resource\Factory\Factory
         arguments:
-            - !service
-                class: Sylius\Resource\Factory\Factory
-                arguments:
-                    - 'Rika\SyliusBrandPlugin\Entity\Brand'
-            - '@sylius.context.locale'
+            - 'Rika\SyliusBrandPlugin\Entity\Brand'
 
     rika_sylius_brand.factory.brand_translation:
         class: Sylius\Resource\Factory\Factory
