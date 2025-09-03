@@ -29,14 +29,6 @@ final class RikaSyliusBrandExtension extends AbstractResourceExtension implement
 
     public function prepend(ContainerBuilder $container): void
     {
-        // Configuration des routes
-        if ($container->hasExtension('framework')) {
-            $container->prependExtensionConfig('framework', [
-                'router' => [
-                    'resource' => '@RikaSyliusBrandPlugin/Resources/config/routes.yaml'
-                ]
-            ]);
-        }
 
         // Configuration Doctrine
         if ($container->hasExtension('doctrine')) {

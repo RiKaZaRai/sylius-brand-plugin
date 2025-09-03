@@ -5,14 +5,12 @@ declare(strict_types=1);
 namespace Rika\SyliusBrandPlugin;
 
 use Rika\SyliusBrandPlugin\DependencyInjection\Compiler\GridCompilerPass;
-use Sylius\Bundle\CoreBundle\Application\SyliusPluginTrait;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
-use Symfony\Component\HttpKernel\Bundle\Bundle;
+use Symfony\Component\HttpKernel\Bundle\AbstractBundle;
+use Symfony\Component\Routing\Loader\Configurator\RoutingConfigurator;
 
-final class RikaSyliusBrandPlugin extends Bundle
+final class RikaSyliusBrandPlugin extends AbstractBundle
 {
-    use SyliusPluginTrait;
-
     public function build(ContainerBuilder $container): void
     {
         parent::build($container);
@@ -20,8 +18,9 @@ final class RikaSyliusBrandPlugin extends Bundle
         $container->addCompilerPass(new GridCompilerPass());
     }
 
-    public function getPath(): string
+    public function configureRoutes(RoutingConfigurator $routes, ?string $environment): void
     {
-        return \dirname(__DIR__);
+        // Importe automatiquement toutes les routes définies dans ton plugin
+        $routes->import(__DIR__ . '/Resources/config/routes.yaml');
     }
 }
