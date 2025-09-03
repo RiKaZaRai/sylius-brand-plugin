@@ -5,12 +5,7 @@ services:
 
     Rika\SyliusBrandPlugin\:
         resource: '../../*'
-        exclude: '../../{DependencyInjection,Entity,Tests,Form,Controller/Admin}'
-
-    # Controller Shop seulement
-    Rika\SyliusBrandPlugin\Controller\Shop\:
-        resource: '../../Controller/Shop'
-        tags: ['controller.service_arguments']
+        exclude: '../../{DependencyInjection,Entity,Tests,Controller}'
 
     # Repository personnalisé - Version Sylius 2.1
     Rika\SyliusBrandPlugin\Repository\BrandRepository:

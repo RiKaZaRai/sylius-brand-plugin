@@ -1,11 +1,7 @@
-rika_sylius_brand_shop_brand_index:
-    path: /brands
-    methods: [GET]
-    defaults:
-        _controller: Rika\SyliusBrandPlugin\Controller\Shop\BrandController::indexAction
-
-rika_sylius_brand_shop_brand_show:
-    path: /brands/{slug}
-    methods: [GET]
-    defaults:
-        _controller: Rika\SyliusBrandPlugin\Controller\Shop\BrandController::showAction
+rika_sylius_brand_shop_brand:
+    resource: |
+        alias: rika_sylius_brand.brand
+        section: shop
+        templates: "@RikaSyliusBrandPlugin/Shop/Brand"
+        only: ['index', 'show']
+    type: sylius.resource

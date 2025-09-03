@@ -22,13 +22,22 @@ final class RikaSyliusBrandExtension extends AbstractResourceExtension implement
         // Enregistrer les ressources
         $this->registerResources('rika_sylius_brand', 'doctrine/orm', $config['resources'], $container);
 
-        // Charger seulement les services
+        // Charger les services
         $loader = new YamlFileLoader($container, new FileLocator(__DIR__ . '/../Resources/config'));
         $loader->load('services.yaml');
     }
 
     public function prepend(ContainerBuilder $container): void
     {
+        // ✅ Configuration des routes
+        if ($container->hasExtension('framework')) {
+            $container->prependExtensionConfig('framework', [
+                'router' => [
+                    'resource' => '@RikaSyliusBrandPlugin/Resources/config/routes.yaml'
+                ]
+            ]);
+        }
+
         // Configuration Doctrine
         if ($container->hasExtension('doctrine')) {
             $container->prependExtensionConfig('doctrine', [
@@ -68,7 +77,7 @@ final class RikaSyliusBrandExtension extends AbstractResourceExtension implement
             ]);
         }
 
-        // Configuration des grids - VERSION CORRIGÉE
+        // Configuration des grids
         if ($container->hasExtension('sylius_grid')) {
             $container->prependExtensionConfig('sylius_grid', [
                 'grids' => [
@@ -89,13 +98,10 @@ final class RikaSyliusBrandExtension extends AbstractResourceExtension implement
                             'logo' => [
                                 'type' => 'twig',
                                 'label' => 'rika_sylius_brand.ui.logo',
+                                'sortable' => false,
                                 'options' => [
                                     'template' => '@RikaSyliusBrandPlugin/Admin/Brand/Grid/Field/logo.html.twig',
                                 ],
-                            ],
-                            'code' => [
-                                'type' => 'string',
-                                'label' => 'sylius.ui.code',
                             ],
                             'name' => [
                                 'type' => 'twig',
@@ -162,7 +168,6 @@ final class RikaSyliusBrandExtension extends AbstractResourceExtension implement
         }
     }
 
-    // Gardez votre méthode getCurrentConfiguration() si nécessaire
     private function getCurrentConfiguration(ContainerBuilder $container): array
     {
         $configuration = $this->getConfiguration([], $container);
