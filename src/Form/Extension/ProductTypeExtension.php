@@ -16,8 +16,8 @@ final class ProductTypeExtension extends AbstractTypeExtension
     {
         $builder->add('brand', BrandChoiceType::class, [
             'required' => false,
-            'label' => 'rika_sylius_brand_plugin.ui.brand',
-            'placeholder' => 'rika_sylius_brand_plugin.ui.choose_brand',
+            'label' => 'rika_sylius_brand.ui.brand',
+            'placeholder' => 'rika_sylius_brand.form.product.select_brand',
         ]);
     }
 
