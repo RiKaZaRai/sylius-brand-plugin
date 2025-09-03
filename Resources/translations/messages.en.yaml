@@ -9,6 +9,11 @@ rika_sylius_brand:
         no_logo: No logo
         position: Position
         products: Products
+        menu:
+            admin:
+                main:
+                    catalog:
+                        brands: Brands
     form:
         brand:
             code: Code
