@@ -14,8 +14,7 @@ class BrandRepository extends EntityRepository implements BrandRepositoryInterfa
     {
         return $this->createQueryBuilder('b')
             ->addSelect('bt')
-            ->leftJoin('b.translations', 'bt')
-            ->andWhere('bt.locale = :localeCode OR bt.locale IS NULL')
+            ->leftJoin('b.translations', 'bt', 'WITH', 'bt.locale = :localeCode')
             ->setParameter('localeCode', $localeCode)
             ->orderBy('b.position', 'ASC')
             ->addOrderBy('b.code', 'ASC')

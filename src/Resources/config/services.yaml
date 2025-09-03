@@ -45,7 +45,7 @@ services:
         tags:
             - { name: kernel.event_listener, event: sylius.menu.admin.main, method: __invoke }
 
-    # Form types - Configuration simplifiée pour Sylius 2.1
+    # Form types
     Rika\SyliusBrandPlugin\Form\Type\BrandType:
         arguments:
             $dataClass: 'Rika\SyliusBrandPlugin\Entity\Brand'
