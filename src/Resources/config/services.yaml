@@ -12,6 +12,23 @@ services:
         resource: '../../Controller/Shop'
         tags: ['controller.service_arguments']
 
+    # Repository personnalisé - Version Sylius 2.1
+    Rika\SyliusBrandPlugin\Repository\BrandRepository:
+        class: Rika\SyliusBrandPlugin\Repository\BrandRepository
+        arguments:
+            - '@doctrine.orm.entity_manager'
+            - !service
+                class: Doctrine\ORM\Mapping\ClassMetadata
+                factory: ['@doctrine.orm.entity_manager', getClassMetadata]
+                arguments:
+                    - 'Rika\SyliusBrandPlugin\Entity\Brand'
+            - '@sylius.context.locale'
+        tags:
+            - { name: 'doctrine.repository_service' }
+
+    # Alias pour que Sylius trouve le repository
+    rika_sylius_brand.repository.brand: '@Rika\SyliusBrandPlugin\Repository\BrandRepository'
+
     # Factory avec initialisation de locale
     Rika\SyliusBrandPlugin\Factory\BrandFactory:
         autowire: false

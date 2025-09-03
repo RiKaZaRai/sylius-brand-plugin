@@ -4,14 +4,38 @@ declare(strict_types=1);
 
 namespace Rika\SyliusBrandPlugin\Repository;
 
+use Doctrine\ORM\EntityManagerInterface;
+use Doctrine\ORM\Mapping\ClassMetadata;
 use Doctrine\ORM\QueryBuilder;
 use Rika\SyliusBrandPlugin\Entity\BrandInterface;
 use Sylius\Bundle\ResourceBundle\Doctrine\ORM\EntityRepository;
+use Sylius\Component\Locale\Context\LocaleContextInterface;
 
 class BrandRepository extends EntityRepository implements BrandRepositoryInterface
 {
-    public function createListQueryBuilder(string $localeCode): QueryBuilder
+    private LocaleContextInterface $localeContext;
+
+    public function __construct(
+        EntityManagerInterface $entityManager,
+        ClassMetadata $class,
+        LocaleContextInterface $localeContext
+    ) {
+        parent::__construct($entityManager, $class);
+        $this->localeContext = $localeContext;
+    }
+
+    public function createListQueryBuilder(?string $localeCode = null): QueryBuilder
     {
+        // Si aucune locale n'est fournie, on utilise la locale courante
+        if (null === $localeCode) {
+            try {
+                $localeCode = $this->localeContext->getLocaleCode();
+            } catch (\Exception $e) {
+                // Fallback sur une locale par défaut si aucune n'est définie
+                $localeCode = 'fr_FR'; // ou 'en_US' selon votre configuration
+            }
+        }
+
         return $this->createQueryBuilder('b')
             ->addSelect('bt')
             ->leftJoin('b.translations', 'bt', 'WITH', 'bt.locale = :localeCode')

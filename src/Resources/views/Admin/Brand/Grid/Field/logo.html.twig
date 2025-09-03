@@ -1,5 +1,9 @@
-{% if data.logo %}
-    <img src="{{ asset('media/brand/' ~ data.logo) }}" alt="{{ data.name }}" style="max-width: 50px; max-height: 50px;" class="ui small image">
+{% set logoPath = value ?? null %}
+{% if logoPath %}
+    <img src="{{ asset('media/brand/' ~ logoPath) }}" 
+         alt="{{ (data and data.name) ? data.name : 'Brand logo' }}" 
+         style="max-width: 50px; max-height: 50px;" 
+         class="ui small image">
 {% else %}
     <span class="ui grey text">{{ 'rika_sylius_brand.ui.no_logo'|trans }}</span>
 {% endif %}

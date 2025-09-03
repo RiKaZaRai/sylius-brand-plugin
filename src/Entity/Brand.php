@@ -61,6 +61,22 @@ class Brand implements BrandInterface, ResourceInterface, SlugAwareInterface
         $this->logoPath = $logoPath;
     }
 
+    /**
+     * Alias pour logoPath - utilisé par la grid
+     */
+    public function getLogo(): ?string
+    {
+        return $this->logoPath;
+    }
+
+    /**
+     * Alias pour logoPath - utilisé par la grid
+     */
+    public function setLogo(?string $logo): void
+    {
+        $this->logoPath = $logo;
+    }
+
     public function getPosition(): ?int
     {
         return $this->position;

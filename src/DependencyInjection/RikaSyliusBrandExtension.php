@@ -68,7 +68,7 @@ final class RikaSyliusBrandExtension extends AbstractResourceExtension implement
             ]);
         }
 
-        // Configuration des grids - AJOUT ICI
+        // Configuration des grids - VERSION CORRIGÉE
         if ($container->hasExtension('sylius_grid')) {
             $container->prependExtensionConfig('sylius_grid', [
                 'grids' => [
@@ -77,10 +77,13 @@ final class RikaSyliusBrandExtension extends AbstractResourceExtension implement
                             'name' => 'doctrine/orm',
                             'options' => [
                                 'class' => 'Rika\SyliusBrandPlugin\Entity\Brand',
+                                'repository' => [
+                                    'method' => 'createListQueryBuilder',
+                                ],
                             ],
                         ],
                         'sorting' => [
-                            'name' => 'asc',
+                            'position' => 'asc',
                         ],
                         'fields' => [
                             'logo' => [
@@ -90,23 +93,35 @@ final class RikaSyliusBrandExtension extends AbstractResourceExtension implement
                                     'template' => '@RikaSyliusBrandPlugin/Admin/Brand/Grid/Field/logo.html.twig',
                                 ],
                             ],
-                            'name' => [
+                            'code' => [
                                 'type' => 'string',
-                                'label' => 'rika_sylius_brand.form.brand.name',
+                                'label' => 'sylius.ui.code',
+                            ],
+                            'name' => [
+                                'type' => 'twig',
+                                'label' => 'sylius.ui.name',
+                                'sortable' => 'translation.name',
+                                'options' => [
+                                    'template' => '@SyliusAdmin/shared/crud/grid/field/translatable_string.html.twig',
+                                ],
                             ],
                             'slug' => [
-                                'type' => 'string',
-                                'label' => 'rika_sylius_brand.form.brand.slug',
+                                'type' => 'twig',
+                                'label' => 'sylius.ui.slug',
+                                'sortable' => 'translation.slug',
+                                'options' => [
+                                    'template' => '@SyliusAdmin/shared/crud/grid/field/translatable_string.html.twig',
+                                ],
                             ],
                             'position' => [
                                 'type' => 'string',
-                                'label' => 'rika_sylius_brand.ui.position',
+                                'label' => 'sylius.ui.position',
                             ],
                             'enabled' => [
                                 'type' => 'twig',
-                                'label' => 'rika_sylius_brand.form.brand.enabled',
+                                'label' => 'sylius.ui.enabled',
                                 'options' => [
-                                    'template' => '@SyliusUi/Grid/Field/enabled.html.twig',
+                                    'template' => '@SyliusAdmin/shared/crud/grid/field/enabled.html.twig',
                                 ],
                             ],
                         ],
@@ -120,7 +135,7 @@ final class RikaSyliusBrandExtension extends AbstractResourceExtension implement
                             ],
                             'enabled' => [
                                 'type' => 'boolean',
-                                'label' => 'rika_sylius_brand.form.brand.enabled',
+                                'label' => 'sylius.ui.enabled',
                             ],
                         ],
                         'actions' => [

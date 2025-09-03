@@ -1,5 +1,4 @@
 <?php
-// src/Repository/BrandRepositoryInterface.php
 
 declare(strict_types=1);
 
@@ -11,7 +10,7 @@ use Sylius\Component\Resource\Repository\RepositoryInterface;
 
 interface BrandRepositoryInterface extends RepositoryInterface
 {
-    public function createListQueryBuilder(string $localeCode): QueryBuilder;
+    public function createListQueryBuilder(?string $localeCode = null): QueryBuilder;
     public function findEnabledBySlug(string $slug, string $localeCode): ?BrandInterface;
     public function findAllEnabled(): array;
 }
