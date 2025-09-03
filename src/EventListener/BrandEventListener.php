@@ -30,13 +30,17 @@ final class BrandEventListener implements EventSubscriberInterface
         $brand = $event->getSubject();
         $request = $this->requestStack->getCurrentRequest();
 
-        $file = $request->files->get('rika_sylius_brand_plugin')['logoPath'] ?? null;
+        if (null === $request) {
+            return;
+        }
+
+        $file = $request->files->get('rika_brand')['logoPath'] ?? null;
 
         if ($file) {
             $filename = uniqid().'.'.$file->guessExtension();
             try {
                 $file->move($this->uploadDir, $filename);
-                $brand->setLogoPath('/uploads/brands/'.$filename);
+                $brand->setLogoPath($filename);
             } catch (FileException $e) {
                 // Optionnel : loguer l'erreur
             }
