@@ -2,7 +2,7 @@ rika_sylius_brand_admin_brand:
     resource: |
         alias: rika_sylius_brand.brand
         section: admin
-        templates: "@SyliusAdmin\\Crud"
+        templates: "@SyliusAdmin\\shared\\crud"
         redirect: update
         grid: rika_sylius_brand_admin_brand
         vars:
@@ -13,3 +13,4 @@ rika_sylius_brand_admin_brand:
             index:
                 icon: 'tag icon'
     type: sylius.resource
+    prefix: /admin
