@@ -3,16 +3,15 @@ imports:
     - { resource: 'grids.yaml' }
 
 services:
-    _defaults:
-        autowire: true
-        autoconfigure: true
-        public: false
+    # Configuration explicite (supprimez la section _defaults problématique)
+    
+    # Menu Listener - Configuration explicite
+    Rika\SyliusBrandPlugin\Menu\AdminMenuListener:
+        arguments: []
+        tags:
+            - { name: kernel.event_listener, event: sylius.menu.admin.main, method: __invoke }
 
-    Rika\SyliusBrandPlugin\:
-        resource: '../../*'
-        exclude: '../../{DependencyInjection,Entity,Tests,Controller}'
-
-    # Repository personnalisé - Version Sylius 2.1
+    # Repository personnalisé
     Rika\SyliusBrandPlugin\Repository\BrandRepository:
         class: Rika\SyliusBrandPlugin\Repository\BrandRepository
         arguments:
@@ -48,14 +47,12 @@ services:
             - 'Rika\SyliusBrandPlugin\Entity\BrandTranslation'
 
     # Event subscribers / listeners
-    # BrandEventListener implémente EventSubscriberInterface => on l'enregistre comme subscriber
     Rika\SyliusBrandPlugin\EventListener\BrandEventListener:
         arguments:
-            $uploadDir: '%rika_sylius_brand.upload_dir%' # défini par l'Extension
+            $uploadDir: '%rika_sylius_brand.upload_dir%'
         tags:
             - { name: kernel.event_subscriber }
 
-    # Slug generation listener for Doctrine lifecycle events
     Rika\SyliusBrandPlugin\EventListener\BrandSlugListener:
         tags:
             - { name: doctrine.event_listener, event: prePersist }
@@ -64,10 +61,6 @@ services:
     Rika\SyliusBrandPlugin\EventListener\ProductMappingListener:
         tags:
             - { name: doctrine.event_subscriber, priority: 100 }
-
-    Rika\SyliusBrandPlugin\Menu\AdminMenuListener:
-        tags:
-            - { name: kernel.event_listener, event: sylius.menu.admin.main, method: __invoke }
 
     # Form types
     Rika\SyliusBrandPlugin\Form\Type\BrandType:
@@ -89,6 +82,6 @@ services:
             - { name: 'form.type' }
 
     # Form extensions
-    Rika\SyliusBrandPlugin\Form\Extension\:
-        resource: '../../Form/Extension'
-        tags: ['form.type_extension']
+    Rika\SyliusBrandPlugin\Form\Extension\ProductTypeExtension:
+        tags:
+            - { name: 'form.type_extension', extended_type: 'Sylius\Bundle\ProductBundle\Form\Type\ProductType' }
