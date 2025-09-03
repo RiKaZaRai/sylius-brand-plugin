@@ -16,28 +16,27 @@ final class RikaSyliusBrandExtension extends AbstractResourceExtension implement
     {
         $config = $this->getCurrentConfiguration($container);
 
-        // Définir le paramètre pour le répertoire d'upload
+        // Paramètre pour le répertoire d’upload
         $container->setParameter('rika_sylius_brand.upload_dir', '%kernel.project_dir%/public/media/brand');
 
-        // Enregistrer les ressources avec la clé correcte
+        // Déclaration des ressources Sylius
         $this->registerResources('rika_sylius_brand', 'doctrine/orm', $config['resources'], $container);
 
-        // Charger les services
+        // Chargement des services
         $loader = new YamlFileLoader($container, new FileLocator(__DIR__ . '/../Resources/config'));
         $loader->load('services.yaml');
     }
 
     public function prepend(ContainerBuilder $container): void
     {
-
-        // Configuration Doctrine
+        // Mapping Doctrine
         if ($container->hasExtension('doctrine')) {
             $container->prependExtensionConfig('doctrine', [
                 'orm' => [
                     'mappings' => [
                         'RikaSyliusBrandPlugin' => [
-                            'type'   => 'xml',
-                            'dir'    => __DIR__ . '/../Resources/config/doctrine',
+                            'type' => 'xml',
+                            'dir' => __DIR__ . '/../Resources/config/doctrine',
                             'prefix' => 'Rika\SyliusBrandPlugin\Entity',
                             'is_bundle' => false,
                         ],
@@ -46,7 +45,7 @@ final class RikaSyliusBrandExtension extends AbstractResourceExtension implement
             ]);
         }
 
-        // Configuration des ressources Sylius
+        // Ressources Sylius
         if ($container->hasExtension('sylius_resource')) {
             $container->prependExtensionConfig('sylius_resource', [
                 'resources' => [
@@ -69,7 +68,7 @@ final class RikaSyliusBrandExtension extends AbstractResourceExtension implement
             ]);
         }
 
-        // Configuration des grids
+        // Grid Admin
         if ($container->hasExtension('sylius_grid')) {
             $container->prependExtensionConfig('sylius_grid', [
                 'grids' => [
@@ -83,9 +82,7 @@ final class RikaSyliusBrandExtension extends AbstractResourceExtension implement
                                 ],
                             ],
                         ],
-                        'sorting' => [
-                            'position' => 'asc',
-                        ],
+                        'sorting' => ['position' => 'asc'],
                         'fields' => [
                             'logo' => [
                                 'type' => 'twig',
@@ -138,20 +135,12 @@ final class RikaSyliusBrandExtension extends AbstractResourceExtension implement
                         ],
                         'actions' => [
                             'main' => [
-                                'create' => [
-                                    'type' => 'create',
-                                ],
+                                'create' => ['type' => 'create'],
                             ],
                             'item' => [
-                                'show' => [
-                                    'type' => 'show',
-                                ],
-                                'update' => [
-                                    'type' => 'update',
-                                ],
-                                'delete' => [
-                                    'type' => 'delete',
-                                ],
+                                'show' => ['type' => 'show'],
+                                'update' => ['type' => 'update'],
+                                'delete' => ['type' => 'delete'],
                             ],
                         ],
                     ],
@@ -188,8 +177,9 @@ final class RikaSyliusBrandExtension extends AbstractResourceExtension implement
 
         return $this->processConfiguration($configuration, array_merge([$defaultConfig], $configs));
     }
+
     public function getAlias(): string
-{
-    return 'rika_sylius_brand';
-}
+    {
+        return 'rika_sylius_brand';
+    }
 }
