@@ -4,7 +4,7 @@
 <h1>{{ brand.translations|first.name }}</h1>
 
 {% if brand.logoPath %}
-    <img src="{{ asset(brand.logoPath) }}" alt="{{ brand.translations|first.name }}">
+    <img src="{{ asset('media/brand/' ~ brand.logoPath) }}" alt="{{ brand.translations|first.name }}">
 {% endif %}
 
 <p>{{ brand.translations|first.description }}</p>

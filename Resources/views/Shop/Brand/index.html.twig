@@ -7,7 +7,7 @@
     {% for brand in brands %}
         <div class="brand-item">
             {% if brand.logoPath %}
-                <img src="{{ asset(brand.logoPath) }}" alt="{{ brand.name }}">
+                <img src="{{ asset('media/brand/' ~ brand.logoPath) }}" alt="{{ brand.name }}">
             {% endif %}
             <h2><a href="{{ path('shop_brand_show', {slug: brand.translations|first.slug}) }}">
                 {{ brand.translations|first.name }}
