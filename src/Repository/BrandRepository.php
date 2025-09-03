@@ -1,5 +1,4 @@
 <?php
-// src/Repository/BrandRepository.php
 
 declare(strict_types=1);
 
@@ -14,10 +13,12 @@ class BrandRepository extends EntityRepository implements BrandRepositoryInterfa
     public function createListQueryBuilder(string $localeCode): QueryBuilder
     {
         return $this->createQueryBuilder('b')
+            ->addSelect('bt')
             ->leftJoin('b.translations', 'bt')
-            ->andWhere('bt.locale = :localeCode')
+            ->andWhere('bt.locale = :localeCode OR bt.locale IS NULL')
             ->setParameter('localeCode', $localeCode)
             ->orderBy('b.position', 'ASC')
+            ->addOrderBy('b.code', 'ASC')
         ;
     }
 

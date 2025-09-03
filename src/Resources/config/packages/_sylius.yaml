@@ -1,0 +1,17 @@
+sylius_resource:
+    resources:
+        rika_sylius_brand.brand:
+            driver: doctrine/orm
+            classes:
+                model: Rika\SyliusBrandPlugin\Entity\Brand
+                repository: Rika\SyliusBrandPlugin\Repository\BrandRepository
+                factory: Rika\SyliusBrandPlugin\Factory\BrandFactory
+                form: Rika\SyliusBrandPlugin\Form\Type\BrandType
+            translation:
+                classes:
+                    model: Rika\SyliusBrandPlugin\Entity\BrandTranslation
+                    form: Rika\SyliusBrandPlugin\Form\Type\BrandTranslationType
+
+# Import des grilles
+imports:
+    - { resource: "@RikaSyliusBrandPlugin/Resources/config/grids/admin_brand.yaml" }
