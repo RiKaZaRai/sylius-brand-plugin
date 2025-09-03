@@ -20,11 +20,17 @@ final class BrandFactory implements FactoryInterface
     {
         /** @var BrandInterface $brand */
         $brand = $this->decoratedFactory->createNew();
-        
-        $localeCode = $this->localeContext->getLocaleCode();
-        $brand->setCurrentLocale($localeCode);
-        $brand->setFallbackLocale($localeCode);
-        
+
+        try {
+            $localeCode = $this->localeContext->getLocaleCode();
+            $brand->setCurrentLocale($localeCode);
+            $brand->setFallbackLocale($localeCode);
+        } catch (\Exception $e) {
+            // Fallback sur une locale par défaut
+            $brand->setCurrentLocale('fr_FR');
+            $brand->setFallbackLocale('fr_FR');
+        }
+
         return $brand;
     }
 }

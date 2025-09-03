@@ -11,9 +11,9 @@ services:
         resource: '../../Controller'
         tags: ['controller.service_arguments']
 
-    # Factory avec initialisation de locale
-    Rika\SyliusBrandPlugin\Factory\BrandFactory:
-        autowire: false
+    # Factory pour Brand - Configuration corrigée
+    rika_sylius_brand.factory.brand:
+        class: Rika\SyliusBrandPlugin\Factory\BrandFactory
         arguments:
             - !service
                 class: Sylius\Resource\Factory\Factory
@@ -21,13 +21,22 @@ services:
                     - 'Rika\SyliusBrandPlugin\Entity\Brand'
             - '@sylius.context.locale'
 
-    # Alias pour que Sylius trouve la factory
-    rika_sylius_brand.factory.brand: '@Rika\SyliusBrandPlugin\Factory\BrandFactory'
-
+    # Factory pour BrandTranslation
     rika_sylius_brand.factory.brand_translation:
         class: Sylius\Resource\Factory\Factory
         arguments:
             - 'Rika\SyliusBrandPlugin\Entity\BrandTranslation'
+
+    # Repository
+    rika_sylius_brand.repository.brand:
+        class: Rika\SyliusBrandPlugin\Repository\BrandRepository
+        arguments:
+            - '@doctrine.orm.default_entity_manager'
+            - !service
+                class: Doctrine\ORM\Mapping\ClassMetadata
+                factory: ['@doctrine.orm.default_entity_manager', getClassMetadata]
+                arguments:
+                    - 'Rika\SyliusBrandPlugin\Entity\Brand'
 
     # Event listeners
     Rika\SyliusBrandPlugin\EventListener\BrandEventListener:
@@ -45,7 +54,7 @@ services:
         tags:
             - { name: kernel.event_listener, event: sylius.menu.admin.main, method: __invoke }
 
-    # Form types - Configuration simplifiée pour Sylius 2.1
+    # Form types
     Rika\SyliusBrandPlugin\Form\Type\BrandType:
         arguments:
             $dataClass: 'Rika\SyliusBrandPlugin\Entity\Brand'
@@ -69,8 +78,11 @@ services:
         resource: '../../Form/Extension'
         tags: ['form.type_extension']
 
-# Ajoutez ces sections à votre services.yaml existant
+# Paramètres
+parameters:
+    rika_sylius_brand.upload_dir: '%kernel.project_dir%/public/media/brand'
 
+# Configuration des ressources Sylius
 sylius_resource:
     resources:
         rika_sylius_brand.brand:
@@ -80,7 +92,13 @@ sylius_resource:
                 repository: Rika\SyliusBrandPlugin\Repository\BrandRepository
                 factory: rika_sylius_brand.factory.brand
                 form: Rika\SyliusBrandPlugin\Form\Type\BrandType
+            translation:
+                classes:
+                    model: Rika\SyliusBrandPlugin\Entity\BrandTranslation
+                    factory: rika_sylius_brand.factory.brand_translation
+                    form: Rika\SyliusBrandPlugin\Form\Type\BrandTranslationType
 
+# Configuration de la grille
 sylius_grid:
     grids:
         rika_sylius_brand_admin_brand:
@@ -97,20 +115,15 @@ sylius_grid:
                     sortable: false
                     options:
                         template: "@RikaSyliusBrandPlugin/Admin/Brand/Grid/Field/logo.html.twig"
-                        vars:
-                            data: resource # Ceci assure que l'entité complète est passée
                 code:
                     type: string
                     label: sylius.ui.code
                     sortable: true
                 name:
-                    type: twig
+                    type: string
                     label: sylius.ui.name
                     sortable: true
-                    options:
-                        template: "@SyliusUi/Grid/Field/string.html.twig"
-                        vars:
-                            data: resource.name
+                    path: name
                 enabled:
                     type: twig
                     label: sylius.ui.enabled

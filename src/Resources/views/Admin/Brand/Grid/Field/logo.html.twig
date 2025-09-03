@@ -1,5 +1,10 @@
 {% if data and data.logoPath %}
-    <img src="{{ asset(data.logoPath) }}" alt="{{ data.name ?: 'Brand' }}" style="height: 50px; max-width: 100px; object-fit: contain;">
+    <img src="{{ asset(data.logoPath) }}" 
+         alt="{{ data.name ?: 'Brand logo' }}" 
+         style="height: 50px; max-width: 100px; object-fit: contain;"
+         class="ui image">
 {% else %}
-    <span class="ui grey text">{{ 'rika_sylius_brand.ui.no_logo'|trans }}</span>
+    <div class="ui placeholder segment" style="height: 50px; width: 100px; display: flex; align-items: center; justify-content: center;">
+        <i class="image outline icon"></i>
+    </div>
 {% endif %}
