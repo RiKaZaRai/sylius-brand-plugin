@@ -20,7 +20,13 @@ class BrandTranslation extends AbstractTranslation implements BrandTranslationIn
         return $this->id;
     }
 
-    public function getName(): ?string
+    // Méthodes requises par BrandTranslationInterface (sans 'get')
+    public function id(): ?int
+    {
+        return $this->id;
+    }
+
+    public function name(): ?string
     {
         return $this->name;
     }
@@ -30,7 +36,7 @@ class BrandTranslation extends AbstractTranslation implements BrandTranslationIn
         $this->name = $name;
     }
 
-    public function getSlug(): ?string
+    public function slug(): ?string
     {
         return $this->slug;
     }
@@ -40,7 +46,7 @@ class BrandTranslation extends AbstractTranslation implements BrandTranslationIn
         $this->slug = $slug;
     }
 
-    public function getDescription(): ?string
+    public function description(): ?string
     {
         return $this->description;
     }
@@ -50,7 +56,7 @@ class BrandTranslation extends AbstractTranslation implements BrandTranslationIn
         $this->description = $description;
     }
 
-    public function getMetaKeywords(): ?string
+    public function metaKeywords(): ?string
     {
         return $this->metaKeywords;
     }
@@ -60,7 +66,7 @@ class BrandTranslation extends AbstractTranslation implements BrandTranslationIn
         $this->metaKeywords = $metaKeywords;
     }
 
-    public function getMetaDescription(): ?string
+    public function metaDescription(): ?string
     {
         return $this->metaDescription;
     }
@@ -68,6 +74,32 @@ class BrandTranslation extends AbstractTranslation implements BrandTranslationIn
     public function setMetaDescription(?string $metaDescription): void
     {
         $this->metaDescription = $metaDescription;
+    }
+
+    // Getters classiques pour la compatibilité (avec 'get')
+    public function getName(): ?string
+    {
+        return $this->name();
+    }
+
+    public function getSlug(): ?string
+    {
+        return $this->slug();
+    }
+
+    public function getDescription(): ?string
+    {
+        return $this->description();
+    }
+
+    public function getMetaKeywords(): ?string
+    {
+        return $this->metaKeywords();
+    }
+
+    public function getMetaDescription(): ?string
+    {
+        return $this->metaDescription();
     }
 
     public function getBrand(): ?BrandInterface
