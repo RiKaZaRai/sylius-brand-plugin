@@ -2,13 +2,15 @@ rika_sylius_brand_admin_brand:
     resource: |
         alias: rika_sylius_brand.brand
         section: admin
-        templates: "@SyliusAdmin\\shared\\crud"
-        except: ['show']
+        templates: "@SyliusAdmin\\Crud"
         redirect: update
         grid: rika_sylius_brand_admin_brand
         vars:
             all:
-                subheader: rika_sylius_brand.ui.manage_brands
+                subheader: rika_sylius_brand.ui.brands
+                templates:
+                    form: "@RikaSyliusBrandPlugin/Admin/Brand/_form.html.twig"
             index:
-                icon: 'trademark'
+                icon: 'tag icon'
     type: sylius.resource
+    prefix: /admin

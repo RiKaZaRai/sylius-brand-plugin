@@ -20,12 +20,7 @@ class BrandTranslation extends AbstractTranslation implements BrandTranslationIn
         return $this->id;
     }
 
-    public function id(): ?int
-    {
-        return $this->id;
-    }
-
-    public function name(): ?string
+    public function getName(): ?string
     {
         return $this->name;
     }
@@ -35,7 +30,7 @@ class BrandTranslation extends AbstractTranslation implements BrandTranslationIn
         $this->name = $name;
     }
 
-    public function slug(): ?string
+    public function getSlug(): ?string
     {
         return $this->slug;
     }
@@ -45,7 +40,7 @@ class BrandTranslation extends AbstractTranslation implements BrandTranslationIn
         $this->slug = $slug;
     }
 
-    public function description(): ?string
+    public function getDescription(): ?string
     {
         return $this->description;
     }
@@ -55,7 +50,7 @@ class BrandTranslation extends AbstractTranslation implements BrandTranslationIn
         $this->description = $description;
     }
 
-    public function metaKeywords(): ?string
+    public function getMetaKeywords(): ?string
     {
         return $this->metaKeywords;
     }
@@ -65,7 +60,7 @@ class BrandTranslation extends AbstractTranslation implements BrandTranslationIn
         $this->metaKeywords = $metaKeywords;
     }
 
-    public function metaDescription(): ?string
+    public function getMetaDescription(): ?string
     {
         return $this->metaDescription;
     }
@@ -75,37 +70,10 @@ class BrandTranslation extends AbstractTranslation implements BrandTranslationIn
         $this->metaDescription = $metaDescription;
     }
 
-    // Méthode helper pour avoir le bon type
     public function getBrand(): ?BrandInterface
     {
         /** @var BrandInterface|null $translatable */
         $translatable = $this->getTranslatable();
         return $translatable;
-    }
-
-    // Méthodes de compatibilité pour les getters classiques
-    public function getName(): ?string
-    {
-        return $this->name();
-    }
-
-    public function getSlug(): ?string
-    {
-        return $this->slug();
-    }
-
-    public function getDescription(): ?string
-    {
-        return $this->description();
-    }
-
-    public function getMetaKeywords(): ?string
-    {
-        return $this->metaKeywords();
-    }
-
-    public function getMetaDescription(): ?string
-    {
-        return $this->metaDescription();
     }
 }

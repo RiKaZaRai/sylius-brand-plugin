@@ -5,17 +5,24 @@ services:
 
     Rika\SyliusBrandPlugin\:
         resource: '../../*'
-        exclude: '../../{DependencyInjection,Entity,Tests,Form,Factory}'
+        exclude: '../../{DependencyInjection,Entity,Tests,Form}'
 
     Rika\SyliusBrandPlugin\Controller\:
         resource: '../../Controller'
         tags: ['controller.service_arguments']
 
-    # Utiliser la factory par défaut de Sylius
-    rika_sylius_brand.factory.brand:
-        class: Sylius\Resource\Factory\Factory
+    # Factory avec initialisation de locale
+    Rika\SyliusBrandPlugin\Factory\BrandFactory:
+        autowire: false
         arguments:
-            - 'Rika\SyliusBrandPlugin\Entity\Brand'
+            - !service
+                class: Sylius\Resource\Factory\Factory
+                arguments:
+                    - 'Rika\SyliusBrandPlugin\Entity\Brand'
+            - '@sylius.context.locale'
+
+    # Alias pour que Sylius trouve la factory
+    rika_sylius_brand.factory.brand: '@Rika\SyliusBrandPlugin\Factory\BrandFactory'
 
     rika_sylius_brand.factory.brand_translation:
         class: Sylius\Resource\Factory\Factory
@@ -38,7 +45,7 @@ services:
         tags:
             - { name: kernel.event_listener, event: sylius.menu.admin.main, method: __invoke }
 
-    # Form types
+    # Form types - Configuration simplifiée pour Sylius 2.1
     Rika\SyliusBrandPlugin\Form\Type\BrandType:
         arguments:
             $dataClass: 'Rika\SyliusBrandPlugin\Entity\Brand'
