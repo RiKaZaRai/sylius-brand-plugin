@@ -51,7 +51,7 @@ final class RikaSyliusBrandPlugin extends Bundle implements PrependExtensionInte
                             'class' => 'Rika\SyliusBrandPlugin\Entity\Brand',
                             'repository' => [
                                 'method' => 'createListQueryBuilder',
-                                'arguments' => ['expr:service("sylius.context.locale").getLocaleCode()'],
+                                'arguments' => ['%locale%'],
                             ],
                         ],
                     ],

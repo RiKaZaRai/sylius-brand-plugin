@@ -19,7 +19,7 @@ final class RikaSyliusBrandExtension extends AbstractResourceExtension implement
         // Définir le paramètre pour le répertoire d'upload
         $container->setParameter('rika_sylius_brand.upload_dir', '%kernel.project_dir%/public/media/brand');
         
-        // Enregistrer les ressources ICI dans load()
+        // Enregistrer les ressources
         $this->registerResources('rika_sylius_brand', 'doctrine/orm', $config['resources'], $container);
         
         // Charger les services
@@ -29,7 +29,7 @@ final class RikaSyliusBrandExtension extends AbstractResourceExtension implement
 
     public function prepend(ContainerBuilder $container): void
     {
-        // Configuration Doctrine
+        // Configuration Doctrine uniquement
         if ($container->hasExtension('doctrine')) {
             $container->prependExtensionConfig('doctrine', [
                 'orm' => [
@@ -44,89 +44,7 @@ final class RikaSyliusBrandExtension extends AbstractResourceExtension implement
                 ],
             ]);
         }
-
-        // Configuration des grilles
-        if ($container->hasExtension('sylius_grid')) {
-            $container->prependExtensionConfig('sylius_grid', [
-                'grids' => [
-                    'rika_sylius_brand_admin_brand' => [
-                        'driver' => [
-                            'name' => 'doctrine/orm',
-                            'options' => [
-                                'class' => 'Rika\SyliusBrandPlugin\Entity\Brand',
-                                'repository' => [
-                                    'method' => 'createListQueryBuilder',
-                                    'arguments' => ['%locale%'],
-                                ],
-                            ],
-                        ],
-                        'sorting' => [
-                            'code' => 'asc',
-                        ],
-                        'fields' => [
-                            'code' => [
-                                'type' => 'string',
-                                'label' => 'sylius.ui.code',
-                                'sortable' => true,
-                            ],
-                            'name' => [
-                                'type' => 'string',
-                                'label' => 'sylius.ui.name',
-                                'path' => 'translation.name',
-                                'sortable' => 'translation.name',
-                            ],
-                            'logoPath' => [
-                                'type' => 'twig',
-                                'label' => 'rika_sylius_brand.ui.logo',
-                                'options' => [
-                                    'template' => '@RikaSyliusBrandPlugin/Admin/Brand/Grid/Field/logo.html.twig',
-                                ],
-                            ],
-                            'enabled' => [
-                                'type' => 'twig',
-                                'label' => 'sylius.ui.enabled',
-                                'options' => [
-                                    'template' => '@SyliusUi/Grid/Field/enabled.html.twig',
-                                ],
-                            ],
-                            'position' => [
-                                'type' => 'string',
-                                'label' => 'sylius.ui.position',
-                                'sortable' => true,
-                            ],
-                        ],
-                        'filters' => [
-                            'search' => [
-                                'type' => 'string',
-                                'label' => 'sylius.ui.search',
-                                'options' => [
-                                    'fields' => ['code', 'translation.name'],
-                                ],
-                            ],
-                            'enabled' => [
-                                'type' => 'boolean',
-                                'label' => 'sylius.ui.enabled',
-                            ],
-                        ],
-                        'actions' => [
-                            'main' => [
-                                'create' => [
-                                    'type' => 'create',
-                                ],
-                            ],
-                            'item' => [
-                                'update' => [
-                                    'type' => 'update',
-                                ],
-                                'delete' => [
-                                    'type' => 'delete',
-                                ],
-                            ],
-                        ],
-                    ],
-                ],
-            ]);
-        }
+        // SUPPRIMÉ: Configuration de grille (sera gérée dans RikaSyliusBrandPlugin.php)
     }
 
     private function getCurrentConfiguration(ContainerBuilder $container): array
