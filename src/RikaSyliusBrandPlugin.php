@@ -21,6 +21,6 @@ final class RikaSyliusBrandPlugin extends AbstractBundle
     public function configureRoutes(RoutingConfigurator $routes, ?string $environment): void
     {
         // Importe automatiquement toutes les routes définies dans ton plugin
-        $routes->import(__DIR__ . '/Resources/config/routes.yaml');
+        $routes->import($this->getPath() . '/Resources/config/routes.yaml');
     }
 }

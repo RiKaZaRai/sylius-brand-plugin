@@ -22,8 +22,8 @@ final class RikaSyliusBrandExtension extends AbstractResourceExtension implement
         // Déclaration des ressources Sylius
         $this->registerResources('rika_sylius_brand', 'doctrine/orm', $config['resources'], $container);
 
-        // Chargement des services
-        $loader = new YamlFileLoader($container, new FileLocator(__DIR__ . '/../Resources/config'));
+        // ⚠️ Resources est à la racine du plugin
+        $loader = new YamlFileLoader($container, new FileLocator(__DIR__ . '/../../Resources/config'));
         $loader->load('services.yaml');
     }
 
@@ -36,7 +36,8 @@ final class RikaSyliusBrandExtension extends AbstractResourceExtension implement
                     'mappings' => [
                         'RikaSyliusBrandPlugin' => [
                             'type' => 'xml',
-                            'dir' => __DIR__ . '/../Resources/config/doctrine',
+                            // ⚠️ Resources est à la racine du plugin
+                            'dir' => __DIR__ . '/../../Resources/config/doctrine',
                             'prefix' => 'Rika\SyliusBrandPlugin\Entity',
                             'is_bundle' => false,
                         ],

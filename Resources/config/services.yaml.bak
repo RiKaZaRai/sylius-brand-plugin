@@ -2,7 +2,6 @@ services:
     _defaults:
         autowire: true
         autoconfigure: true
-        public: false
 
     Rika\SyliusBrandPlugin\:
         resource: '../../*'
@@ -43,19 +42,13 @@ services:
         arguments:
             - 'Rika\SyliusBrandPlugin\Entity\BrandTranslation'
 
-    # Event subscribers / listeners
-    # BrandEventListener implémente EventSubscriberInterface => on l'enregistre comme subscriber
+    # Event listeners
     Rika\SyliusBrandPlugin\EventListener\BrandEventListener:
         arguments:
-            $uploadDir: '%rika_sylius_brand.upload_dir%' # défini par l'Extension
+            $uploadDir: '%rika_sylius_brand.upload_dir%'
         tags:
-            - { name: kernel.event_subscriber }
-
-    # Slug generation listener for Doctrine lifecycle events
-    Rika\SyliusBrandPlugin\EventListener\BrandSlugListener:
-        tags:
-            - { name: doctrine.event_listener, event: prePersist }
-            - { name: doctrine.event_listener, event: preUpdate }
+            - { name: kernel.event_listener, event: 'rika_sylius_brand.brand.pre_create', method: uploadLogo }
+            - { name: kernel.event_listener, event: 'rika_sylius_brand.brand.pre_update', method: uploadLogo }
 
     Rika\SyliusBrandPlugin\EventListener\ProductMappingListener:
         tags:
