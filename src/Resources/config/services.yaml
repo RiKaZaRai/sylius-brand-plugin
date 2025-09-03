@@ -5,10 +5,11 @@ services:
 
     Rika\SyliusBrandPlugin\:
         resource: '../../*'
-        exclude: '../../{DependencyInjection,Entity,Tests,Form}'
+        exclude: '../../{DependencyInjection,Entity,Tests,Form,Controller/Admin}'
 
-    Rika\SyliusBrandPlugin\Controller\:
-        resource: '../../Controller'
+    # Controller Shop seulement
+    Rika\SyliusBrandPlugin\Controller\Shop\:
+        resource: '../../Controller/Shop'
         tags: ['controller.service_arguments']
 
     # Factory avec initialisation de locale
