@@ -12,5 +12,7 @@ rika_sylius_brand_admin_brand:
                     form: "@RikaSyliusBrandPlugin/Admin/Brand/_form.html.twig"
             index:
                 icon: 'tag icon'
+        classes:
+            controller: Rika\SyliusBrandPlugin\Controller\Admin\BrandController
     type: sylius.resource
     prefix: /admin

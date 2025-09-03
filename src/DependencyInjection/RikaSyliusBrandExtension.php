@@ -19,6 +19,9 @@ final class RikaSyliusBrandExtension extends AbstractResourceExtension implement
         // Définir le paramètre pour le répertoire d'upload
         $container->setParameter('rika_sylius_brand.upload_dir', '%kernel.project_dir%/public/media/brand');
         
+        // Enregistrer les ressources ICI dans load()
+        $this->registerResources('rika_sylius_brand', 'doctrine/orm', $config['resources'], $container);
+        
         // Charger les services
         $loader = new YamlFileLoader($container, new FileLocator(__DIR__ . '/../Resources/config'));
         $loader->load('services.yaml');
@@ -26,11 +29,6 @@ final class RikaSyliusBrandExtension extends AbstractResourceExtension implement
 
     public function prepend(ContainerBuilder $container): void
     {
-        $config = $this->getCurrentConfiguration($container);
-        
-        // Enregistrer les ressources DANS prepend() comme le plugin officiel
-        $this->registerResources('rika_sylius_brand', 'doctrine/orm', $config['resources'], $container);
-        
         // Configuration Doctrine
         if ($container->hasExtension('doctrine')) {
             $container->prependExtensionConfig('doctrine', [
@@ -63,7 +61,7 @@ final class RikaSyliusBrandExtension extends AbstractResourceExtension implement
                             ],
                         ],
                         'sorting' => [
-                            'code' => 'asc', // Tri par défaut
+                            'code' => 'asc',
                         ],
                         'fields' => [
                             'code' => [
@@ -145,6 +143,7 @@ final class RikaSyliusBrandExtension extends AbstractResourceExtension implement
                         'interface' => 'Rika\SyliusBrandPlugin\Entity\BrandInterface',
                         'repository' => 'Rika\SyliusBrandPlugin\Repository\BrandRepository',
                         'form' => 'Rika\SyliusBrandPlugin\Form\Type\BrandType',
+                        'factory' => 'Rika\SyliusBrandPlugin\Factory\BrandFactory',
                     ],
                     'translation' => [
                         'classes' => [
