@@ -1,7 +1,3 @@
-rika_sylius_brand_plugin_admin:
-    resource: "routing/admin.yaml"
-    prefix: /admin
-
 rika_sylius_brand_plugin_shop:
     resource: "routing/shop.yaml"
     prefix: /{_locale}
