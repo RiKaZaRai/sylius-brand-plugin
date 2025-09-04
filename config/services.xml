@@ -5,13 +5,10 @@
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd"
 >
-    <imports>
-        <import resource="services/**" />
-    </imports>
-
     <parameters>
         <parameter key="rika_sylius_brand.model.brand.class">Rika\SyliusBrandPlugin\Entity\Brand</parameter>
         <parameter key="rika_sylius_brand.model.brand_translation.class">Rika\SyliusBrandPlugin\Entity\BrandTranslation</parameter>
+        <parameter key="rika_sylius_brand.upload_dir">%kernel.project_dir%/public/media/brands</parameter>
     </parameters>
 
     <services>
