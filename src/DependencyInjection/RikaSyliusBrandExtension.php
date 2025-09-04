@@ -6,6 +6,7 @@ namespace Rika\SyliusBrandPlugin\DependencyInjection;
 
 use Sylius\Bundle\CoreBundle\DependencyInjection\PrependDoctrineMigrationsTrait;
 use Sylius\Bundle\ResourceBundle\DependencyInjection\Extension\AbstractResourceExtension;
+use Symfony\Component\Config\Definition\ConfigurationInterface;
 use Symfony\Component\Config\FileLocator;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Extension\PrependExtensionInterface;
@@ -17,15 +18,24 @@ final class RikaSyliusBrandExtension extends AbstractResourceExtension implement
 
     public function load(array $configs, ContainerBuilder $container): void
     {
-        $config = $this->processConfiguration($this->getConfiguration([], $container), $configs);
-        $this->registerResources('rika_sylius_brand', 'doctrine/orm', $config['resources'], $container);
+        /** @var ConfigurationInterface $configuration */
+        $configuration = $this->getConfiguration([], $container);
+        $configs = $this->processConfiguration($configuration, $configs);
 
         $loader = new XmlFileLoader($container, new FileLocator(__DIR__ . '/../../config'));
         $loader->load('services.xml');
+
+        // Paramètres spécifiques (si configurés)
+        $container->setParameter('rika_sylius_brand.upload_dir', '%kernel.project_dir%/public/media/brands');
     }
 
     public function prepend(ContainerBuilder $container): void
     {
+        $config = $this->getCurrentConfiguration($container);
+        
+        // Enregistrement des ressources (pattern Refund exact)
+        $this->registerResources('rika_sylius_brand', 'doctrine/orm', $config['resources'], $container);
+        
         $this->prependDoctrineMigrations($container);
     }
 
@@ -44,5 +54,14 @@ final class RikaSyliusBrandExtension extends AbstractResourceExtension implement
         return [
             'Sylius\Bundle\CoreBundle\Migrations',
         ];
+    }
+
+    private function getCurrentConfiguration(ContainerBuilder $container): array
+    {
+        /** @var ConfigurationInterface $configuration */
+        $configuration = $this->getConfiguration([], $container);
+        $configs = $container->getExtensionConfig($this->getAlias());
+        
+        return $this->processConfiguration($configuration, $configs);
     }
 }
