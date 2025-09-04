@@ -15,11 +15,12 @@ final class RikaSyliusBrandExtension extends AbstractResourceExtension implement
 {
     use PrependDoctrineMigrationsTrait;
 
-    /** @psalm-suppress UnusedVariable */
     public function load(array $configs, ContainerBuilder $container): void
     {
-        $loader = new XmlFileLoader($container, new FileLocator(__DIR__ . '/../../config'));
+        $config = $this->processConfiguration($this->getConfiguration([], $container), $configs);
+        $this->registerResources('rika_sylius_brand', 'doctrine/orm', $config['resources'], $container);
 
+        $loader = new XmlFileLoader($container, new FileLocator(__DIR__ . '/../../config'));
         $loader->load('services.xml');
     }
 
