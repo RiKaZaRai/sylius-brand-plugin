@@ -1,5 +1,6 @@
 sylius_twig_hooks:
     hooks:
+
         # Hook pour ajouter le champ Brand dans le formulaire produit (onglet Details)
         'sylius_admin.product.form.tab_details':
             'brand_field':
