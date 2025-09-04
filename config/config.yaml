@@ -1,0 +1,20 @@
+# Configuration du plugin Brand
+parameters:
+    # Upload directory pour les logos de marques
+    rika_sylius_brand.upload_dir: '%kernel.project_dir%/public/media/brand'
+
+sylius_resource:
+    resources:
+        rika_sylius_brand.brand:
+            driver: doctrine/orm
+            classes:
+                model: Rika\SyliusBrandPlugin\Entity\Brand
+                repository: Rika\SyliusBrandPlugin\Repository\BrandRepository
+                factory: Rika\SyliusBrandPlugin\Factory\BrandFactory
+            translation:
+                classes:
+                    model: Rika\SyliusBrandPlugin\Entity\BrandTranslation
+                    factory: Sylius\Resource\Factory\Factory
+
+imports:
+    - { resource: "twig_hooks/**/*.yaml" }

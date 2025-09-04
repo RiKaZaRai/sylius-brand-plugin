@@ -1,0 +1,29 @@
+sylius_twig_hooks:
+    hooks:
+        # Hook pour afficher la marque dans la fiche produit
+        'sylius_shop.product.show.content':
+            'brand_info':
+                template: '@RikaSyliusBrandPlugin/shop/product/_brand_info.html.twig'
+                priority: 50
+                enabled: true
+
+        # Hook pour afficher la marque dans la liste des produits
+        'sylius_shop.product.index.item':
+            'brand_badge':
+                template: '@RikaSyliusBrandPlugin/shop/product/_brand_badge.html.twig'
+                priority: 30
+                enabled: true
+
+        # Hook pour le menu des marques
+        'sylius_shop.layout.header.content':
+            'brands_menu':
+                template: '@RikaSyliusBrandPlugin/shop/layout/_brands_menu.html.twig'
+                priority: 20
+                enabled: true
+
+        # Hook pour les filtres de recherche (si vous voulez filtrer par marque)
+        'sylius_shop.product.index.sidebar':
+            'brand_filter':
+                template: '@RikaSyliusBrandPlugin/shop/product/_brand_filter.html.twig'
+                priority: 40
+                enabled: true

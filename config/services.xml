@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<container
+    xmlns="http://symfony.com/schema/dic/services"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd"
+>
+    <imports>
+        <import resource="services/**" />
+    </imports>
+
+    <parameters>
+        <parameter key="rika_sylius_brand.model.brand.class">Rika\SyliusBrandPlugin\Entity\Brand</parameter>
+        <parameter key="rika_sylius_brand.model.brand_translation.class">Rika\SyliusBrandPlugin\Entity\BrandTranslation</parameter>
+    </parameters>
+
+    <services>
+        <!-- Menu Listener -->
+        <service id="Rika\SyliusBrandPlugin\Menu\AdminMenuListener" autowire="true" autoconfigure="true">
+            <tag name="kernel.event_listener" event="sylius.menu.admin.main" method="__invoke" />
+        </service>
+
+        <!-- Repository personnalisé -->
+        <service id="Rika\SyliusBrandPlugin\Repository\BrandRepository" autowire="false">
+            <argument type="service" id="doctrine.orm.entity_manager" />
+            <argument type="service">
+                <service class="Doctrine\ORM\Mapping\ClassMetadata">
+                    <factory service="doctrine.orm.entity_manager" method="getClassMetadata" />
+                    <argument>%rika_sylius_brand.model.brand.class%</argument>
+                </service>
+            </argument>
+            <argument type="service" id="sylius.context.locale" />
+            <tag name="doctrine.repository_service" />
+        </service>
+
+        <!-- Alias pour le repository -->
+        <service id="rika_sylius_brand.repository.brand" alias="Rika\SyliusBrandPlugin\Repository\BrandRepository" />
+
+        <!-- Factory Brand -->
+        <service id="Rika\SyliusBrandPlugin\Factory\BrandFactory" autowire="false">
+            <argument type="service">
+                <service class="Sylius\Resource\Factory\Factory">
+                    <argument>%rika_sylius_brand.model.brand.class%</argument>
+                </service>
+            </argument>
+            <argument type="service" id="sylius.context.locale" />
+        </service>
+
+        <!-- Alias pour la factory Brand -->
+        <service id="rika_sylius_brand.factory.brand" alias="Rika\SyliusBrandPlugin\Factory\BrandFactory" />
+
+        <!-- Factory Brand Translation -->
+        <service id="rika_sylius_brand.factory.brand_translation" class="Sylius\Resource\Factory\Factory">
+            <argument>%rika_sylius_brand.model.brand_translation.class%</argument>
+        </service>
+
+        <!-- Event Listeners -->
+        <service id="Rika\SyliusBrandPlugin\EventListener\BrandEventListener" autowire="true" autoconfigure="true">
+            <argument key="$uploadDir">%rika_sylius_brand.upload_dir%</argument>
+            <tag name="kernel.event_subscriber" />
+        </service>
+
+        <service id="Rika\SyliusBrandPlugin\EventListener\BrandSlugListener" autowire="true" autoconfigure="true">
+            <tag name="doctrine.event_listener" event="prePersist" />
+            <tag name="doctrine.event_listener" event="preUpdate" />
+        </service>
+
+        <service id="Rika\SyliusBrandPlugin\EventListener\ProductMappingListener" autowire="true" autoconfigure="true">
+            <tag name="doctrine.event_subscriber" priority="100" />
+        </service>
+
+        <!-- Form Types -->
+        <service id="Rika\SyliusBrandPlugin\Form\Type\BrandType" autowire="false">
+            <argument key="$dataClass">%rika_sylius_brand.model.brand.class%</argument>
+            <argument key="$validationGroups" type="collection">
+                <argument>sylius</argument>
+            </argument>
+            <tag name="form.type" />
+        </service>
+
+        <service id="Rika\SyliusBrandPlugin\Form\Type\BrandTranslationType" autowire="false">
+            <argument key="$dataClass">%rika_sylius_brand.model.brand_translation.class%</argument>
+            <argument key="$validationGroups" type="collection">
+                <argument>sylius</argument>
+            </argument>
+            <tag name="form.type" />
+        </service>
+
+        <service id="Rika\SyliusBrandPlugin\Form\Type\BrandChoiceType" autowire="true" autoconfigure="true">
+            <tag name="form.type" />
+        </service>
+
+        <!-- Form Extension -->
+        <service id="Rika\SyliusBrandPlugin\Form\Extension\ProductTypeExtension" autowire="true" autoconfigure="true">
+            <tag name="form.type_extension" extended_type="Sylius\Bundle\ProductBundle\Form\Type\ProductType" />
+        </service>
+    </services>
+</container>

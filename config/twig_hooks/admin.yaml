@@ -1,0 +1,29 @@
+sylius_twig_hooks:
+    hooks:
+        # Hook pour ajouter le champ Brand dans le formulaire produit (onglet Details)
+        'sylius_admin.product.form.tab_details':
+            'brand_field':
+                template: '@RikaSyliusBrandPlugin/admin/product/_brand_field.html.twig'
+                priority: 50
+                enabled: true
+
+        # Hook pour afficher la marque dans la liste des produits admin
+        'sylius_admin.product.grid.item':
+            'brand_column':
+                template: '@RikaSyliusBrandPlugin/admin/product/_brand_column.html.twig'
+                priority: 40
+                enabled: true
+
+        # Hook pour ajouter des styles CSS spécifiques aux marques
+        'sylius_admin.layout.stylesheets':
+            'brand_styles':
+                template: '@RikaSyliusBrandPlugin/admin/layout/_styles.html.twig'
+                priority: 10
+                enabled: true
+
+        # Hook pour ajouter du JavaScript spécifique
+        'sylius_admin.layout.javascripts':
+            'brand_scripts':
+                template: '@RikaSyliusBrandPlugin/admin/layout/_scripts.html.twig'
+                priority: 10
+                enabled: true

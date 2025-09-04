@@ -1,0 +1,15 @@
+{
+    "controllers": {
+        "@symfony/ux-dropzone": {
+            "dropzone": {
+                "enabled": true,
+                "fetch": "eager"
+            }
+        },
+        "brand-logo": {
+            "enabled": true,
+            "fetch": "eager"
+        }
+    },
+    "entrypoints": []
+}

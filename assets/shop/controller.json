@@ -1,0 +1,13 @@
+{
+    "controllers": {
+        "brand-selector": {
+            "enabled": true,
+            "fetch": "lazy"
+        },
+        "brand-filter": {
+            "enabled": true,
+            "fetch": "lazy"
+        }
+    },
+    "entrypoints": []
+}
