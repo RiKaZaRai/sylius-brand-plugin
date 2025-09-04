@@ -11,6 +11,7 @@ use Symfony\Component\Config\FileLocator;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Extension\PrependExtensionInterface;
 use Symfony\Component\DependencyInjection\Loader\XmlFileLoader;
+use Symfony\Component\DependencyInjection\Loader\YamlFileLoader; // AJOUT
 
 final class RikaSyliusBrandExtension extends AbstractResourceExtension implements PrependExtensionInterface
 {
@@ -25,7 +26,10 @@ final class RikaSyliusBrandExtension extends AbstractResourceExtension implement
         $loader = new XmlFileLoader($container, new FileLocator(__DIR__ . '/../../config'));
         $loader->load('services.xml');
 
-        // Paramètres spécifiques (si configurés)
+        // AJOUT : Charger la configuration YAML (grilles, etc.)
+        $yamlLoader = new YamlFileLoader($container, new FileLocator(__DIR__ . '/../../config'));
+        $yamlLoader->load('config.yaml');
+
         $container->setParameter('rika_sylius_brand.upload_dir', '%kernel.project_dir%/public/media/brands');
     }
 
@@ -33,7 +37,7 @@ final class RikaSyliusBrandExtension extends AbstractResourceExtension implement
     {
         $config = $this->getCurrentConfiguration($container);
         
-        // Configuration Doctrine automatique (comme le core Sylius)
+        // Configuration Doctrine automatique
         if ($container->hasExtension('doctrine')) {
             $container->prependExtensionConfig('doctrine', [
                 'orm' => [
@@ -49,9 +53,7 @@ final class RikaSyliusBrandExtension extends AbstractResourceExtension implement
             ]);
         }
         
-        // Enregistrement des ressources (pattern Refund exact)
         $this->registerResources('rika_sylius_brand', 'doctrine/orm', $config['resources'], $container);
-        
         $this->prependDoctrineMigrations($container);
     }
 

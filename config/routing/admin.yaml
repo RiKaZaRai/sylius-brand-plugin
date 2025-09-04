@@ -11,5 +11,5 @@ rika_sylius_brand_admin_brand:
                 subheader: rika_sylius_brand.ui.manage_brands
                 header: rika_sylius_brand.ui.brands
             index:
-                icon: 'star'
+                icon: 'tabler:star'
     type: sylius.resource
