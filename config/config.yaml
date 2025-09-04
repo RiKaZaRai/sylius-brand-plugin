@@ -1,51 +1,67 @@
-# Configuration du plugin Brand - définition minimale nécessaire
+# Configuration du plugin Brand - Pattern officiel Sylius Refund exact
 
-# Définition par défaut des ressources (utilisée par l'Extension)
-rika_sylius_brand:
-    resources:
-        brand:
-            classes:
-                model: Rika\SyliusBrandPlugin\Entity\Brand
-                repository: Rika\SyliusBrandPlugin\Repository\BrandRepository
-                factory: Rika\SyliusBrandPlugin\Factory\BrandFactory
-                form: Rika\SyliusBrandPlugin\Form\Type\BrandType
-            translation:
-                classes:
-                    model: Rika\SyliusBrandPlugin\Entity\BrandTranslation
-                    form: Rika\SyliusBrandPlugin\Form\Type\BrandTranslationType
+imports:
+    - { resource: "twig_hooks/**/*.yaml" }
 
-# Configuration pour l'application utilisateur
+parameters:
+    rika_sylius_brand.upload_dir: "%kernel.project_dir%/public/media/brands"
+
+# Configuration Sylius Grid (comme dans Refund)
 sylius_grid:
     grids:
         rika_sylius_brand_admin_brand:
             driver:
                 name: doctrine/orm
                 options:
-                    class: Rika\SyliusBrandPlugin\Entity\Brand
+                    class: "Rika\\SyliusBrandPlugin\\Entity\\Brand"
             sorting:
                 position: asc
             fields:
                 name:
-                    type: string
+                    type: twig
                     label: sylius.ui.name
                     sortable: translation.name
-                    path: translation.name
+                    options:
+                        template: "@SyliusAdmin/shared/crud/grid/field/translatable_string.html.twig"
+                slug:
+                    type: twig
+                    label: sylius.ui.slug
+                    sortable: translation.slug
+                    options:
+                        template: "@SyliusAdmin/shared/crud/grid/field/translatable_string.html.twig"
+                position:
+                    type: string
+                    label: sylius.ui.position
+                    sortable: ~
                 enabled:
                     type: twig
                     label: sylius.ui.enabled
                     sortable: enabled
                     options:
-                        template: '@SyliusUi/Grid/Field/enabled.html.twig'
+                        template: "@SyliusAdmin/shared/crud/grid/field/enabled.html.twig"
             actions:
+                item:
+                    show:
+                        type: show
+                        label: sylius.ui.show
+                        icon: "tabler:eye"
+                    update:
+                        type: update
+                        label: sylius.ui.edit
+                        icon: "tabler:pencil"
+                    delete:
+                        type: delete
+                        label: sylius.ui.delete
+                        icon: "tabler:trash"
                 main:
                     create:
                         type: create
-                item:
-                    update:
-                        type: update
-                    delete:
-                        type: delete
-
-# Imports des hooks Twig
-imports:
-    - { resource: "twig_hooks/**/*.yaml" }
+                        label: sylius.ui.create
+                        icon: "tabler:plus"
+            filters:
+                search:
+                    type: string
+                    label: sylius.ui.search
+                enabled:
+                    type: boolean
+                    label: sylius.ui.enabled

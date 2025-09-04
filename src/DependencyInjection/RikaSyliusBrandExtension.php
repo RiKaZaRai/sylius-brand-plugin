@@ -33,6 +33,22 @@ final class RikaSyliusBrandExtension extends AbstractResourceExtension implement
     {
         $config = $this->getCurrentConfiguration($container);
         
+        // Configuration Doctrine automatique (comme le core Sylius)
+        if ($container->hasExtension('doctrine')) {
+            $container->prependExtensionConfig('doctrine', [
+                'orm' => [
+                    'mappings' => [
+                        'RikaSyliusBrandPlugin' => [
+                            'type' => 'xml',
+                            'dir' => __DIR__ . '/../../config/doctrine',
+                            'prefix' => 'Rika\SyliusBrandPlugin\Entity',
+                            'is_bundle' => false,
+                        ],
+                    ],
+                ],
+            ]);
+        }
+        
         // Enregistrement des ressources (pattern Refund exact)
         $this->registerResources('rika_sylius_brand', 'doctrine/orm', $config['resources'], $container);
         
