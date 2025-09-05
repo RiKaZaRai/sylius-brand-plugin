@@ -17,17 +17,19 @@ final class RikaSyliusBrandExtension extends AbstractResourceExtension implement
 
     public function load(array $configs, ContainerBuilder $container): void
     {
-        $configuration = new Configuration();
-        $config = $this->processConfiguration($configuration, $configs);
-
         $loader = new YamlFileLoader($container, new FileLocator(__DIR__ . '/../../config'));
         $loader->load('services.yaml');
+
+        $configuration = new Configuration();
+        $config = $this->processConfiguration($configuration, $configs);
 
         // Enregistrement des ressources Sylius
         $this->registerResources('rika_sylius_brand', 'doctrine/orm', $config['resources'], $container);
 
-        // Configuration des paramètres
-        $container->setParameter('rika_sylius_brand.upload_dir', $config['upload_dir']);
+        // Configuration des paramètres avec valeur par défaut
+        $container->setParameter('rika_sylius_brand.upload_dir', 
+            $config['upload_dir'] ?? '%kernel.project_dir%/public/media/brands'
+        );
     }
 
     public function prepend(ContainerBuilder $container): void

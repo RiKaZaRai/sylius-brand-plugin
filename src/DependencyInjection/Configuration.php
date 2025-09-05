@@ -4,8 +4,15 @@ declare(strict_types=1);
 
 namespace Rika\SyliusBrandPlugin\DependencyInjection;
 
-use Sylius\Bundle\ResourceBundle\SyliusResourceBundle;
-use Symfony\Component\Config\Definition\Builder\ArrayNodeDefinition;
+use Rika\SyliusBrandPlugin\Entity\Brand;
+use Rika\SyliusBrandPlugin\Entity\BrandTranslation;
+use Rika\SyliusBrandPlugin\Factory\BrandFactory;
+use Rika\SyliusBrandPlugin\Form\Type\BrandTranslationType;
+use Rika\SyliusBrandPlugin\Form\Type\BrandType;
+use Rika\SyliusBrandPlugin\Repository\BrandRepository;
+use Sylius\Bundle\ResourceBundle\Controller\ResourceController;
+use Sylius\Bundle\ResourceBundle\Doctrine\ORM\EntityRepository;
+use Sylius\Component\Resource\Factory\Factory;
 use Symfony\Component\Config\Definition\Builder\TreeBuilder;
 use Symfony\Component\Config\Definition\ConfigurationInterface;
 
@@ -17,8 +24,29 @@ final class Configuration implements ConfigurationInterface
         $rootNode = $treeBuilder->getRootNode();
 
         $rootNode
+            ->addDefaultsIfNotSet()
             ->children()
-                ->scalarNode('driver')->defaultValue('doctrine/orm')->end()
+                ->scalarNode('upload_dir')
+                    ->defaultValue('%kernel.project_dir%/public/media/brands')
+                    ->info('Directory where brand logos and images are stored')
+                ->end()
+                ->arrayNode('features')
+                    ->addDefaultsIfNotSet()
+                    ->children()
+                        ->booleanNode('enable_brand_filtering')
+                            ->defaultTrue()
+                            ->info('Enable brand filtering on product listings')
+                        ->end()
+                        ->booleanNode('enable_brand_pages')
+                            ->defaultTrue()
+                            ->info('Enable individual brand pages on shop')
+                        ->end()
+                        ->booleanNode('enable_brand_logos')
+                            ->defaultTrue()
+                            ->info('Enable brand logo upload and display')
+                        ->end()
+                    ->end()
+                ->end()
             ->end()
         ;
 
@@ -27,7 +55,7 @@ final class Configuration implements ConfigurationInterface
         return $treeBuilder;
     }
 
-    private function addResourcesSection(ArrayNodeDefinition $node): void
+    private function addResourcesSection($node): void
     {
         $node
             ->children()
@@ -41,12 +69,11 @@ final class Configuration implements ConfigurationInterface
                                 ->arrayNode('classes')
                                     ->addDefaultsIfNotSet()
                                     ->children()
-                                        ->scalarNode('model')->defaultValue('Rika\SyliusBrandPlugin\Entity\Brand')->cannotBeEmpty()->end()
-                                        ->scalarNode('interface')->defaultValue('Rika\SyliusBrandPlugin\Entity\BrandInterface')->end()
-                                        ->scalarNode('controller')->defaultValue('Sylius\Bundle\ResourceBundle\Controller\ResourceController')->end()
-                                        ->scalarNode('repository')->defaultValue('Rika\SyliusBrandPlugin\Repository\BrandRepository')->end()
-                                        ->scalarNode('factory')->defaultValue('Rika\SyliusBrandPlugin\Factory\BrandFactory')->end()
-                                        ->scalarNode('form')->defaultValue('Rika\SyliusBrandPlugin\Form\Type\BrandType')->cannotBeEmpty()->end()
+                                        ->scalarNode('model')->defaultValue(Brand::class)->cannotBeEmpty()->end()
+                                        ->scalarNode('controller')->defaultValue(ResourceController::class)->cannotBeEmpty()->end()
+                                        ->scalarNode('repository')->defaultValue(BrandRepository::class)->cannotBeEmpty()->end()
+                                        ->scalarNode('factory')->defaultValue(BrandFactory::class)->cannotBeEmpty()->end()
+                                        ->scalarNode('form')->defaultValue(BrandType::class)->cannotBeEmpty()->end()
                                     ->end()
                                 ->end()
                                 ->arrayNode('translation')
@@ -56,12 +83,11 @@ final class Configuration implements ConfigurationInterface
                                         ->arrayNode('classes')
                                             ->addDefaultsIfNotSet()
                                             ->children()
-                                                ->scalarNode('model')->defaultValue('Rika\SyliusBrandPlugin\Entity\BrandTranslation')->cannotBeEmpty()->end()
-                                                ->scalarNode('interface')->defaultValue('Rika\SyliusBrandPlugin\Entity\BrandTranslationInterface')->end()
-                                                ->scalarNode('controller')->defaultValue('Sylius\Bundle\ResourceBundle\Controller\ResourceController')->end()
-                                                ->scalarNode('repository')->defaultValue('Sylius\Bundle\ResourceBundle\Doctrine\ORM\EntityRepository')->end()
-                                                ->scalarNode('factory')->defaultValue('Sylius\Resource\Factory\Factory')->end()
-                                                ->scalarNode('form')->defaultValue('Rika\SyliusBrandPlugin\Form\Type\BrandTranslationType')->cannotBeEmpty()->end()
+                                                ->scalarNode('model')->defaultValue(BrandTranslation::class)->cannotBeEmpty()->end()
+                                                ->scalarNode('controller')->defaultValue(ResourceController::class)->cannotBeEmpty()->end()
+                                                ->scalarNode('repository')->defaultValue(EntityRepository::class)->cannotBeEmpty()->end()
+                                                ->scalarNode('factory')->defaultValue(Factory::class)->cannotBeEmpty()->end()
+                                                ->scalarNode('form')->defaultValue(BrandTranslationType::class)->cannotBeEmpty()->end()
                                             ->end()
                                         ->end()
                                     ->end()
