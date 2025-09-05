@@ -6,8 +6,10 @@ namespace Rika\SyliusBrandPlugin\DependencyInjection;
 
 use Sylius\Bundle\CoreBundle\DependencyInjection\PrependDoctrineMigrationsTrait;
 use Sylius\Bundle\ResourceBundle\DependencyInjection\Extension\AbstractResourceExtension;
+use Symfony\Component\Config\FileLocator;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Extension\PrependExtensionInterface;
+use Symfony\Component\DependencyInjection\Loader\YamlFileLoader;
 
 final class RikaSyliusBrandExtension extends AbstractResourceExtension implements PrependExtensionInterface
 {
@@ -15,10 +17,12 @@ final class RikaSyliusBrandExtension extends AbstractResourceExtension implement
 
     public function load(array $configs, ContainerBuilder $container): void
     {
+        $loader = new YamlFileLoader($container, new FileLocator(__DIR__ . '/../../config'));
+        $loader->load('services.yaml');
+        
         $configuration = new Configuration();
         $config = $this->processConfiguration($configuration, $configs);
         
-        // Avec Symfony 7.3, les services sont auto-découverts
         $container->setParameter('rika_sylius_brand.upload_dir', '%kernel.project_dir%/public/media/brands');
     }
 
