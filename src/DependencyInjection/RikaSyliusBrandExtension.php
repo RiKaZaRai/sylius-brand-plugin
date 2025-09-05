@@ -6,7 +6,6 @@ namespace Rika\SyliusBrandPlugin\DependencyInjection;
 
 use Sylius\Bundle\CoreBundle\DependencyInjection\PrependDoctrineMigrationsTrait;
 use Sylius\Bundle\ResourceBundle\DependencyInjection\Extension\AbstractResourceExtension;
-use Symfony\Component\Config\Definition\ConfigurationInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Extension\PrependExtensionInterface;
 
@@ -19,6 +18,7 @@ final class RikaSyliusBrandExtension extends AbstractResourceExtension implement
         $configuration = new Configuration();
         $config = $this->processConfiguration($configuration, $configs);
         
+        // Avec Symfony 7.3, les services sont auto-découverts
         $container->setParameter('rika_sylius_brand.upload_dir', '%kernel.project_dir%/public/media/brands');
     }
 
@@ -62,7 +62,6 @@ final class RikaSyliusBrandExtension extends AbstractResourceExtension implement
 
     private function getCurrentConfiguration(ContainerBuilder $container): array
     {
-        /** @var ConfigurationInterface $configuration */
         $configuration = $this->getConfiguration([], $container);
         $configs = $container->getExtensionConfig($this->getAlias());
         

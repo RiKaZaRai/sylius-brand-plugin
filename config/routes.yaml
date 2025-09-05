@@ -1,0 +1,2 @@
+imports:
+    - { resource: "@RikaSyliusBrandPlugin/config/routes/*.yaml" }
