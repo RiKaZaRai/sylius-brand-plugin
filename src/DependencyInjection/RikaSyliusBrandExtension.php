@@ -24,6 +24,7 @@ final class RikaSyliusBrandExtension extends AbstractResourceExtension implement
         // Chargement des services YAML - C'EST LA PARTIE MANQUANTE !
         $loader = new YamlFileLoader($container, new FileLocator(__DIR__ . '/../../config'));
         $loader->load('services.yaml');
+        $loader->load('config.yaml');
         
         // Paramètres spécifiques
         $container->setParameter('rika_sylius_brand.upload_dir', '%kernel.project_dir%/public/media/brands');
