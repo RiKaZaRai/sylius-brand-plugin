@@ -10,6 +10,12 @@ services:
     _defaults:
         public: true
 
+    # Menu Listener - Ajouté selon la doc officielle Sylius 2.0
+    rika_sylius_brand.listener.admin.menu_builder:
+        class: Rika\SyliusBrandPlugin\Menu\AdminMenuListener
+        tags:
+            - { name: kernel.event_listener, event: sylius.menu.admin.main, method: addAdminMenuItems }
+
     # Repository personnalisé
     Rika\SyliusBrandPlugin\Repository\BrandRepository:
         autowire: false
