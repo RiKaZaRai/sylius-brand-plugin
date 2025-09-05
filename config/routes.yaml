@@ -1,2 +1,3 @@
 imports:
-    - { resource: "@RikaSyliusBrandPlugin/config/routes/*.yaml" }
+    - { resource: "@RikaSyliusBrandPlugin/config/routes/admin.yaml" }
+    - { resource: "@RikaSyliusBrandPlugin/config/routes/shop.yaml" }
