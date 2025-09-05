@@ -17,20 +17,22 @@ final class RikaSyliusBrandExtension extends AbstractResourceExtension implement
 
     public function load(array $configs, ContainerBuilder $container): void
     {
-        $loader = new YamlFileLoader($container, new FileLocator(__DIR__ . '/../../config'));
-        $loader->load('services.yaml');
-        $loader->load('config.yaml');
-        
         $configuration = new Configuration();
         $config = $this->processConfiguration($configuration, $configs);
-        
-        $container->setParameter('rika_sylius_brand.upload_dir', '%kernel.project_dir%/public/media/brands');
+
+        $loader = new YamlFileLoader($container, new FileLocator(__DIR__ . '/../../config'));
+        $loader->load('services.yaml');
+
+        // Enregistrement des ressources Sylius
+        $this->registerResources('rika_sylius_brand', 'doctrine/orm', $config['resources'], $container);
+
+        // Configuration des paramètres
+        $container->setParameter('rika_sylius_brand.upload_dir', $config['upload_dir']);
     }
 
     public function prepend(ContainerBuilder $container): void
     {
-        $config = $this->getCurrentConfiguration($container);
-        
+        // Configuration Doctrine
         if ($container->hasExtension('doctrine')) {
             $container->prependExtensionConfig('doctrine', [
                 'orm' => [
@@ -45,8 +47,8 @@ final class RikaSyliusBrandExtension extends AbstractResourceExtension implement
                 ],
             ]);
         }
-        
-        $this->registerResources('rika_sylius_brand', 'doctrine/orm', $config['resources'], $container);
+
+        // Configuration des migrations
         $this->prependDoctrineMigrations($container);
     }
 
@@ -63,13 +65,5 @@ final class RikaSyliusBrandExtension extends AbstractResourceExtension implement
     protected function getNamespacesOfMigrationsExecutedBefore(): array
     {
         return ['Sylius\Bundle\CoreBundle\Migrations'];
-    }
-
-    private function getCurrentConfiguration(ContainerBuilder $container): array
-    {
-        $configuration = $this->getConfiguration([], $container);
-        $configs = $container->getExtensionConfig($this->getAlias());
-        
-        return $this->processConfiguration($configuration, $configs);
     }
 }
