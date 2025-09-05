@@ -7,8 +7,10 @@ namespace Rika\SyliusBrandPlugin\DependencyInjection;
 use Sylius\Bundle\CoreBundle\DependencyInjection\PrependDoctrineMigrationsTrait;
 use Sylius\Bundle\ResourceBundle\DependencyInjection\Extension\AbstractResourceExtension;
 use Symfony\Component\Config\Definition\ConfigurationInterface;
+use Symfony\Component\Config\FileLocator;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Extension\PrependExtensionInterface;
+use Symfony\Component\DependencyInjection\Loader\YamlFileLoader;
 
 final class RikaSyliusBrandExtension extends AbstractResourceExtension implements PrependExtensionInterface
 {
@@ -19,7 +21,11 @@ final class RikaSyliusBrandExtension extends AbstractResourceExtension implement
         $configuration = new Configuration();
         $config = $this->processConfiguration($configuration, $configs);
         
-        // Paramètres spécifiques (comme CmsPlugin fait avec ses templates)
+        // Chargement des services YAML - C'EST LA PARTIE MANQUANTE !
+        $loader = new YamlFileLoader($container, new FileLocator(__DIR__ . '/../../config'));
+        $loader->load('services.yaml');
+        
+        // Paramètres spécifiques
         $container->setParameter('rika_sylius_brand.upload_dir', '%kernel.project_dir%/public/media/brands');
     }
 
@@ -47,6 +53,7 @@ final class RikaSyliusBrandExtension extends AbstractResourceExtension implement
         $this->prependDoctrineMigrations($container);
     }
 
+    // ... reste du code identique
     protected function getMigrationsNamespace(): string
     {
         return 'RikaSyliusBrandPlugin\Migrations';
