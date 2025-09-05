@@ -28,12 +28,12 @@ final class RikaSyliusBrandExtension extends AbstractResourceExtension implement
 
     protected function getMigrationsNamespace(): string
     {
-        return 'Rika\RikaSyliusBrandExtension\Migrations';
+        return 'RikaSyliusBrandPlugin\Migrations';
     }
 
     protected function getMigrationsDirectory(): string
     {
-        return '@RikaSyliusBrandExtension/src/Migrations';
+        return '@RikaSyliusBrandPlugin/src/Migrations';
     }
 
     protected function getNamespacesOfMigrationsExecutedBefore(): array
