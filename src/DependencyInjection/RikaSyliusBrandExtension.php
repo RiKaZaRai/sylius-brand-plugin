@@ -19,6 +19,7 @@ final class RikaSyliusBrandExtension extends AbstractResourceExtension implement
     {
         $loader = new YamlFileLoader($container, new FileLocator(__DIR__ . '/../../config'));
         $loader->load('services.yaml');
+        $loader->load('config.yaml');
         
         $configuration = new Configuration();
         $config = $this->processConfiguration($configuration, $configs);
