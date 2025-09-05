@@ -15,11 +15,22 @@ final class RikaSyliusBrandExtension extends AbstractResourceExtension implement
 {
     use PrependDoctrineMigrationsTrait;
 
-    /** @psalm-suppress UnusedVariable */
     public function load(array $configs, ContainerBuilder $container): void
     {
+        $config = $this->processConfiguration($this->getConfiguration([], $container), $configs);
         $loader = new YamlFileLoader($container, new FileLocator(__DIR__ . '/../../config'));
-        $loader->load('config.yaml');
+        
+        // Enregistrer les ressources Sylius
+        $this->registerResources('rika_sylius_brand', 'doctrine/orm', $config['resources'], $container);
+        
+        // Charger les services
+        $loader->load('services.yaml');
+        
+        // Configurer les paramètres
+        $container->setParameter('rika_sylius_brand.upload_dir', $config['upload_dir']);
+        $container->setParameter('rika_sylius_brand.features.enable_brand_filtering', $config['features']['enable_brand_filtering']);
+        $container->setParameter('rika_sylius_brand.features.enable_brand_pages', $config['features']['enable_brand_pages']);
+        $container->setParameter('rika_sylius_brand.features.enable_brand_logos', $config['features']['enable_brand_logos']);
     }
 
     public function prepend(ContainerBuilder $container): void
@@ -29,7 +40,7 @@ final class RikaSyliusBrandExtension extends AbstractResourceExtension implement
 
     protected function getMigrationsNamespace(): string
     {
-        return 'RikaSyliusBrandPlugin\Migrations';
+        return 'Rika\SyliusBrandPlugin\Migrations';
     }
 
     protected function getMigrationsDirectory(): string
@@ -42,5 +53,12 @@ final class RikaSyliusBrandExtension extends AbstractResourceExtension implement
         return [
             'Sylius\Bundle\CoreBundle\Migrations',
         ];
+    }
+
+    private function getCurrentConfiguration(ContainerBuilder $container): array
+    {
+        $configuration = $this->getConfiguration([], $container);
+        $configs = $container->getExtensionConfig($this->getAlias());
+        return $this->processConfiguration($configuration, $configs);
     }
 }
