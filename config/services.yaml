@@ -1,5 +1,5 @@
 imports:
-    - { resource: 'services/' }
+    - { resource: 'services/', ignore_errors: true }
 
 parameters:
     rika_sylius_brand.model.brand.class: 'Rika\SyliusBrandPlugin\Entity\Brand'
