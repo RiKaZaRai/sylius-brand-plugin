@@ -1,2 +1,6 @@
+imports:
+    - { resource: "twig_hooks/**/*.yaml" }
+    - { resource: "grids/**/*.yaml" }
+
 parameters:
     rika_sylius_brand.upload_dir: "%kernel.project_dir%/public/media/brands"
