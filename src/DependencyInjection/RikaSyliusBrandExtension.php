@@ -18,15 +18,13 @@ final class RikaSyliusBrandExtension extends AbstractResourceExtension implement
 
     public function load(array $configs, ContainerBuilder $container): void
     {
-        $configuration = new Configuration();
-        $config = $this->processConfiguration($configuration, $configs);
-        
-        // Chargement des services YAML - C'EST LA PARTIE MANQUANTE !
         $loader = new YamlFileLoader($container, new FileLocator(__DIR__ . '/../../config'));
         $loader->load('services.yaml');
-        $loader->load('config.yaml');
+
+        /** @var ConfigurationInterface $configuration */
+        $configuration = $this->getConfiguration([], $container);
+        $config = $this->processConfiguration($configuration, $configs);
         
-        // Paramètres spécifiques
         $container->setParameter('rika_sylius_brand.upload_dir', '%kernel.project_dir%/public/media/brands');
     }
 
@@ -34,7 +32,6 @@ final class RikaSyliusBrandExtension extends AbstractResourceExtension implement
     {
         $config = $this->getCurrentConfiguration($container);
         
-        // Configuration Doctrine automatique
         if ($container->hasExtension('doctrine')) {
             $container->prependExtensionConfig('doctrine', [
                 'orm' => [
@@ -54,7 +51,6 @@ final class RikaSyliusBrandExtension extends AbstractResourceExtension implement
         $this->prependDoctrineMigrations($container);
     }
 
-    // ... reste du code identique
     protected function getMigrationsNamespace(): string
     {
         return 'RikaSyliusBrandPlugin\Migrations';
