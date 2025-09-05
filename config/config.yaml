@@ -1,5 +1,4 @@
 imports:
-    - { resource: "@RikaSyliusBrandPlugin/config/services.yaml" }
     - { resource: "@RikaSyliusBrandPlugin/config/grids/admin/admin.yaml" }
     - { resource: "@RikaSyliusBrandPlugin/config/routes/admin.yaml" }
     - { resource: "@RikaSyliusBrandPlugin/config/twig_hooks/**/*.yaml" }
