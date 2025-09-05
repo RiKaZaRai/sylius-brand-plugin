@@ -1,8 +1,22 @@
 imports:
     - { resource: "@RikaSyliusBrandPlugin/config/services.yaml" }
-    - { resource: "@RikaSyliusBrandPlugin/config/routes.yaml" }
+    - { resource: "@RikaSyliusBrandPlugin/config/grids/admin/admin.yaml" }
+    - { resource: "@RikaSyliusBrandPlugin/config/routes/admin.yaml" }
     - { resource: "@RikaSyliusBrandPlugin/config/twig_hooks/**/*.yaml" }
-    - { resource: "@RikaSyliusBrandPlugin/config/grids/**/*.yaml" }
+
+sylius_resource:
+    resources:
+        rika_sylius_brand.brand:
+            driver: doctrine/orm
+            classes:
+                model: Rika\SyliusBrandPlugin\Entity\Brand
+                repository: Rika\SyliusBrandPlugin\Repository\BrandRepository
+                factory: Rika\SyliusBrandPlugin\Factory\BrandFactory
+                form: Rika\SyliusBrandPlugin\Form\Type\BrandType
+            translation:
+                classes:
+                    model: Rika\SyliusBrandPlugin\Entity\BrandTranslation
+                    form: Rika\SyliusBrandPlugin\Form\Type\BrandTranslationType
 
 parameters:
     rika_sylius_brand.upload_dir: "%kernel.project_dir%/public/media/brands"

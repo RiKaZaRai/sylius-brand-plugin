@@ -18,50 +18,22 @@ final class RikaSyliusBrandExtension extends AbstractResourceExtension implement
     public function load(array $configs, ContainerBuilder $container): void
     {
         $loader = new YamlFileLoader($container, new FileLocator(__DIR__ . '/../../config'));
-        $loader->load('config.yaml');
-
-        $configuration = new Configuration();
-        $config = $this->processConfiguration($configuration, $configs);
-
-        // Enregistrement des ressources Sylius
-        $this->registerResources('rika_sylius_brand', 'doctrine/orm', $config['resources'], $container);
-
-        // Configuration des paramètres avec valeur par défaut
-        $container->setParameter('rika_sylius_brand.upload_dir', 
-            $config['upload_dir'] ?? '%kernel.project_dir%/public/media/brands'
-        );
+        $loader->load('services.yaml');
     }
 
     public function prepend(ContainerBuilder $container): void
     {
-        // Configuration Doctrine
-        if ($container->hasExtension('doctrine')) {
-            $container->prependExtensionConfig('doctrine', [
-                'orm' => [
-                    'mappings' => [
-                        'RikaSyliusBrandPlugin' => [
-                            'type' => 'xml',
-                            'dir' => __DIR__ . '/../../config/doctrine',
-                            'prefix' => 'Rika\SyliusBrandPlugin\Entity',
-                            'is_bundle' => false,
-                        ],
-                    ],
-                ],
-            ]);
-        }
-
-        // Configuration des migrations
         $this->prependDoctrineMigrations($container);
     }
 
     protected function getMigrationsNamespace(): string
     {
-        return 'RikaSyliusBrandPlugin\Migrations';
+        return 'Sylius\ProductBundlePlugin\Migrations';
     }
 
     protected function getMigrationsDirectory(): string
     {
-        return '@RikaSyliusBrandPlugin/src/Migrations';
+        return '@SyliusProductBundlePlugin/src/Migrations';
     }
 
     protected function getNamespacesOfMigrationsExecutedBefore(): array
